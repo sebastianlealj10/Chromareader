@@ -77,7 +77,9 @@ public class MainActivity extends AppCompatActivity
         {
             //funciones del opencv
             ima =imread_mat();
+            //no rotar si es en movil
             ima=rotateima(ima);
+            //
             imwrite_mat(ima);
             showima();
             btn2.setEnabled(true);

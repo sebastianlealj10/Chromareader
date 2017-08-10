@@ -19,7 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PreprocessingActivity"></activity>
+        <activity android:name=".PreprocessingActivity" />
+        <activity android:name=".MineralActivity" />
+        <activity android:name=".OrganicActivity"></activity>
     </application>
 
 </manifest>
