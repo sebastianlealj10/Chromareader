@@ -21,7 +21,8 @@
         </activity>
         <activity android:name=".PreprocessingActivity" />
         <activity android:name=".MineralActivity" />
-        <activity android:name=".OrganicActivity"></activity>
+        <activity android:name=".OrganicActivity" />
+        <activity android:name=".CoreActivity"></activity>
     </application>
 
 </manifest>
