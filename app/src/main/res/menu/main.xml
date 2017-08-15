@@ -1,3 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xmlns="http://schemas.android.com/apk/res-auto"
+    >
+    <item
+        android:id="@+id/capturar"
+        android:icon="@drawable/ic_camera"
+        android:title="Capturar"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/cargar"
+        android:icon="@drawable/ic_camera"
+        android:title="Cargar"
+        app:showAsAction="always"/>
 </menu>
