@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -64,6 +65,37 @@ public class CoreActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main,menu);
         return true;
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.capturar) {
+            //Creamos el Intent para llamar a la Camara
+            Intent cameraIntent = new Intent(
+                    android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            //Creamos una carpeta en la memeria del terminal
+            File imagesFolder = new File(Environment.getExternalStorageDirectory(), "sebas");
+            imagesFolder.mkdirs();
+            //añadimos el nombre de la imagen
+            File image = new File(imagesFolder, "cromaoriginal.jpg");
+            Uri uriSavedImage = Uri.fromFile(image);
+            //Le decimos al Intent que queremos grabar la imagen
+            cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uriSavedImage);
+            //Lanzamos la aplicacion de la camara con retorno (forResult)
+
+            startActivityForResult(cameraIntent, captureimage);
+            return true;
+        }
+        if (id == R.id.cargar) {
+            Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+            startActivityForResult(gallery, loadimage);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     //Clase donde se muestra la foto en el imageview provenga de la camara o de la galeria
     @Override
     protected void onActivityResult(int requestCode,int resultCode, Intent data)
@@ -107,39 +139,12 @@ public class CoreActivity extends AppCompatActivity {
 
         }
     }
-    //Boton donde se captura la foto y se guarda en la memoria
-    @OnClick(R.id.button)
-    public void takephoto(View view)
-    {
-        //Creamos el Intent para llamar a la Camara
-        Intent cameraIntent = new Intent(
-                android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        //Creamos una carpeta en la memeria del terminal
-        File imagesFolder = new File(Environment.getExternalStorageDirectory(), "sebas");
-        imagesFolder.mkdirs();
-        //añadimos el nombre de la imagen
-        File image = new File(imagesFolder, "cromaoriginal.jpg");
-        Uri uriSavedImage = Uri.fromFile(image);
-        //Le decimos al Intent que queremos grabar la imagen
-        cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uriSavedImage);
-        //Lanzamos la aplicacion de la camara con retorno (forResult)
-
-        startActivityForResult(cameraIntent, captureimage);
-
-    }
     // Boton donde se lanza la nueva actividad
     @OnClick(R.id.button2)
     public void processingphoto(View view)
     {
         intent = new Intent(this, PreprocessingActivity.class);
         startActivity(intent);
-    }
-    @OnClick(R.id.button3)
-    public void loadimage(View view)
-    {
-        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-
-        startActivityForResult(gallery, loadimage);
     }
     public Mat imread_mat(){
         Mat imagen;

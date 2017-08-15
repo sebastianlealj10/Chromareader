@@ -53,17 +53,9 @@
             android:layout_height="wrap_content"
             android:layout_column="3"
             android:layout_row="0"
-            android:onClick="loadimage"
-            android:text="Cargar" />
+            android:onClick="describir"
+            android:text="Descripción" />
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_row="0"
-            android:onClick=" takephotoo"
-            android:text="Capturar" />
     </GridLayout>
 
 

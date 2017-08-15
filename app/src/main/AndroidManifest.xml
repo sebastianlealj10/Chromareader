@@ -22,7 +22,5 @@
         <activity android:name=".PreprocessingActivity" />
         <activity android:name=".MineralActivity" />
         <activity android:name=".OrganicActivity" />
-        <activity android:name=".CoreActivity"></activity>
-    </application>
-
+        <activity android:name=".CoreActivity"></ac v
 </manifest>
