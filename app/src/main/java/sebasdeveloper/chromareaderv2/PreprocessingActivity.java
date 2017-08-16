@@ -3,11 +3,15 @@ package sebasdeveloper.chromareaderv2;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Size;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +26,8 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+
+import java.io.File;
 
 public class PreprocessingActivity extends AppCompatActivity {
     Intent intent;
@@ -96,6 +102,25 @@ public class PreprocessingActivity extends AppCompatActivity {
                 }
             }
         return imaGray1;
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.preprocessing,menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.capturar) {
+
+        }
+        if (id == R.id.cargar) {
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public Mat rotateima(Mat imagen){
