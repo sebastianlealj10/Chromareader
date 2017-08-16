@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="205dp"
-        android:layout_height="208dp"
+        android:layout_width="309dp"
+        android:layout_height="198dp"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
@@ -21,21 +21,21 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:rotation="0"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintHorizontal_bias="1.0"
-        tools:layout_editor_absoluteX="179dp" />
+        app:layout_constraintVertical_bias="0.137"
+        app:layout_constraintHorizontal_bias="0.506"
+        tools:layout_editor_absoluteY="31dp"
+        tools:layout_editor_absoluteX="34dp" />
 
     <GridLayout
-        android:layout_width="287dp"
+        android:layout_width="223dp"
         android:layout_height="50dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:layout_constraintHorizontal_bias="0.983"
-        tools:layout_editor_absoluteY="461dp"
-        tools:layout_editor_absoluteX="96dp">
+        app:layout_constraintHorizontal_bias="0.562"
+        tools:layout_editor_absoluteX="84dp">
 
         <Button
             android:id="@+id/button2"
@@ -43,7 +43,7 @@
             android:enabled="false"
             android:layout_height="wrap_content"
             android:layout_column="1"
-            android:text="Procesar"
+            android:text="Almacenar"
             android:onClick="processingphoto"
             android:layout_row="0" />
 
@@ -51,12 +51,20 @@
             android:id="@+id/button3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_column="3"
+            android:layout_column="2"
             android:layout_row="0"
             android:onClick="describir"
             android:text="Descripción" />
 
     </GridLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="308dp"
+        android:layout_height="193dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="38dp"
+        tools:layout_editor_absoluteY="254dp" />
 
 
 </android.support.constraint.ConstraintLayout>
