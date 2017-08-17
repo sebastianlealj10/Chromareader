@@ -48,21 +48,9 @@ public class PreprocessingActivity extends AppCompatActivity {
         ima=imread_mat();
         imagray=deletebackground();
        // ima=rotateima(ima);
-       // imwrite_mat(ima);
+        imwrite_mat(ima);
         imwrite_mat(imagray);
         showima();
-    }
-    @OnClick(R.id.button8)
-    public void processingmineral(View view)
-    {
-        intent = new Intent(this, MineralActivity.class);
-        startActivity(intent);
-    }
-    @OnClick(R.id.button9)
-    public void processingorganic(View view)
-    {
-        intent = new Intent(this, OrganicActivity.class);
-        startActivity(intent);
     }
     public Mat deletebackground(){
 /*/
@@ -113,13 +101,17 @@ public class PreprocessingActivity extends AppCompatActivity {
 
         int id = item.getItemId();
 
-        if (id == R.id.capturar) {
+        if (id == R.id.diagnostico) {
+            intent = new Intent(this, MineralActivity.class);
+            startActivity(intent);
+        }
+        if (id == R.id.procesamiento) {
+            intent = new Intent(this, OrganicActivity.class);
+            startActivity(intent);
+        }
+        if (id == R.id.derechos) {
 
         }
-        if (id == R.id.cargar) {
-
-        }
-
         return super.onOptionsItemSelected(item);
     }
 

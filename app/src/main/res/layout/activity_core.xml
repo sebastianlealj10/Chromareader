@@ -60,11 +60,27 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="308dp"
-        android:layout_height="193dp"
+        android:layout_width="158dp"
+        android:layout_height="33dp"
         android:text="TextView"
-        tools:layout_editor_absoluteX="38dp"
+        tools:layout_editor_absoluteX="188dp"
         tools:layout_editor_absoluteY="254dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="159dp"
+        android:layout_height="30dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="187dp"
+        tools:layout_editor_absoluteY="300dp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="160dp"
+        android:layout_height="30dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="188dp"
+        tools:layout_editor_absoluteY="350dp" />
 
 
 </android.support.constraint.ConstraintLayout>
