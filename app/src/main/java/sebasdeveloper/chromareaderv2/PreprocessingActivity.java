@@ -48,8 +48,8 @@ public class PreprocessingActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String nombre = intent.getStringExtra(CoreActivity.Nombre);
         String lugar = intent.getStringExtra(CoreActivity.Lugar);
-        txt.setTextSize(40);
-        txt.setText(nombre+lugar);
+        String descripcion = intent.getStringExtra(CoreActivity.Descripcion);
+        txt.setText("Nombre:"+nombre+"\n"+"Lugar:"+lugar+"\n"+"Descripción:"+descripcion);
         ima=imread_mat();
         imagray=deletebackground();
        // ima=rotateima(ima);

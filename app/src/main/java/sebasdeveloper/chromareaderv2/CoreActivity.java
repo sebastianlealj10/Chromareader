@@ -149,14 +149,13 @@ public class CoreActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PreprocessingActivity.class);
         EditText editText1 = (EditText) findViewById(R.id.editText1);
         String nombre = editText1.getText().toString();
-   //     EditText editText3 = (EditText) findViewById(R.id.editText3);
-    //    String descripcion = editText3.getText().toString();
         intent.putExtra(Nombre, nombre);
-        startActivity(intent);
-        Intent intent2 = new Intent(this, PreprocessingActivity.class);
         EditText editText2 = (EditText) findViewById(R.id.editText2);
         String lugar = editText2.getText().toString();
         intent.putExtra(Lugar, lugar);
+        EditText editText3 = (EditText) findViewById(R.id.editText3);
+        String descripcion = editText3.getText().toString();
+        intent.putExtra(Descripcion, descripcion);
         startActivity(intent);
     }
     public Mat imread_mat(){
