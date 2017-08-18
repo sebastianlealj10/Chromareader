@@ -33,7 +33,7 @@ public class PreprocessingActivity extends AppCompatActivity {
     Intent intent;
     //Bindeo para el imageview
     @BindView(R.id.image2) ImageView img2;
-    @BindView(R.id.textView2) TextView txt1;
+    @BindView(R.id.textView) TextView txt;
     Bitmap bmp;
     Mat ima;
     Mat imagray;
@@ -45,6 +45,11 @@ public class PreprocessingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preprocessing);
         ButterKnife.bind(this);
+        Intent intent = getIntent();
+        String nombre = intent.getStringExtra(CoreActivity.Nombre);
+        String lugar = intent.getStringExtra(CoreActivity.Lugar);
+        txt.setTextSize(40);
+        txt.setText(nombre+lugar);
         ima=imread_mat();
         imagray=deletebackground();
        // ima=rotateima(ima);

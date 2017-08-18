@@ -13,7 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
@@ -41,7 +43,6 @@ public class CoreActivity extends AppCompatActivity {
     }
 
     Uri imageUri;
-    Intent i;
     Intent intent;
     Bitmap bmp;
     Bitmap bmp2;
@@ -52,6 +53,9 @@ public class CoreActivity extends AppCompatActivity {
     Button btn2;
     final static int captureimage=0;
     final static int loadimage=1;
+    public final static String Nombre = "nombre";
+    public final static String Lugar= "lugar";
+    public final static String Descripcion= "descripcion";
     @Override
     //Clase donde se crea el layout y se inicializa la libreria ButterKnife
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +139,6 @@ public class CoreActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             img.setImageBitmap(bmp2);
-            btn2.setEnabled(true);
 
         }
     }
@@ -143,7 +146,17 @@ public class CoreActivity extends AppCompatActivity {
     @OnClick(R.id.button2)
     public void processingphoto(View view)
     {
-        intent = new Intent(this, PreprocessingActivity.class);
+        Intent intent = new Intent(this, PreprocessingActivity.class);
+        EditText editText1 = (EditText) findViewById(R.id.editText1);
+        String nombre = editText1.getText().toString();
+   //     EditText editText3 = (EditText) findViewById(R.id.editText3);
+    //    String descripcion = editText3.getText().toString();
+        intent.putExtra(Nombre, nombre);
+        startActivity(intent);
+        Intent intent2 = new Intent(this, PreprocessingActivity.class);
+        EditText editText2 = (EditText) findViewById(R.id.editText2);
+        String lugar = editText2.getText().toString();
+        intent.putExtra(Lugar, lugar);
         startActivity(intent);
     }
     public Mat imread_mat(){
@@ -166,4 +179,5 @@ public class CoreActivity extends AppCompatActivity {
         Core.transpose(imagen,imagen);
         return imagen;
     }
+
 }
