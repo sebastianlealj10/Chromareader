@@ -59,11 +59,10 @@ public class PreprocessingActivity extends AppCompatActivity {
         showima();
     }
     public Mat deletebackground(){
-
         int rows=ima.rows();
         int cols=ima.cols();
         int ch = ima.channels();
-
+/*/
      //   double[] pix=ima.get(100,100);
       //  txt1.setText(Double.toString(pix[0])+" "+Double.toString(pix[1])+" "+Double.toString(pix[2]));
 //
@@ -76,6 +75,22 @@ public class PreprocessingActivity extends AppCompatActivity {
                         if (abs(pix[0] -  pix[1])  < 10 ) {
                         ima.put(i, j, datocolor);}
                  }
+            }
+        }
+/*/
+
+        //   double[] pix=ima.get(100,100);
+        //  txt1.setText(Double.toString(pix[0])+" "+Double.toString(pix[1])+" "+Double.toString(pix[2]));
+//
+
+        {
+            for (int i=0; i<rows; i++)
+            {
+                for (int j=0; j<cols; j++)
+                {
+                    double[] pix = ima.get(i, j);
+                        double[] datocolor={pix[0]};
+                        ima.put(i, j, datocolor);}
             }
         }
 
