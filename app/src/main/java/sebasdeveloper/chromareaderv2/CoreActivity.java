@@ -1,11 +1,16 @@
 package sebasdeveloper.chromareaderv2;
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,9 +35,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.R.attr.permission;
+
 public class CoreActivity extends AppCompatActivity {
     //Clase para inicializar la libreria opencv
     private static final String TAG = "MainActivity";
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS =0 ;
 
     static {
         if(!OpenCVLoader.initDebug()){
@@ -62,6 +70,7 @@ public class CoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_core);
         ButterKnife.bind(this);
+
     }
     //Opcional
     @Override
@@ -71,6 +80,7 @@ public class CoreActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
 
         int id = item.getItemId();
 
@@ -178,5 +188,4 @@ public class CoreActivity extends AppCompatActivity {
         Core.transpose(imagen,imagen);
         return imagen;
     }
-
 }
