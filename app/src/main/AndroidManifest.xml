@@ -23,6 +23,6 @@
         <activity android:name=".MineralActivity" />
         <activity android:name=".OrganicActivity" />
         <activity android:name=".CoreActivity"/>
-        />
+
     </application>
 </manifest>
