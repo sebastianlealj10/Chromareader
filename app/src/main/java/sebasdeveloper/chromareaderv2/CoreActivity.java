@@ -1,20 +1,24 @@
 package sebasdeveloper.chromareaderv2;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import com.github.jeffersonrojas.materialpermissions.library.PermissionManager;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
@@ -54,12 +58,17 @@ public class CoreActivity extends AppCompatActivity {
     final static int captureimage = 0;
     final static int loadimage = 1;
 
+    PermissionManager permissionManager;
+
     @Override
     //Clase donde se crea el layout y se inicializa la libreria ButterKnife
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_core);
         ButterKnife.bind(this);
+        permissionManager = new PermissionManager(this);
+        permissionManager.addPermission(Manifest.permission.CAMERA);
+        permissionManager.addPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
     //Opcional
@@ -70,25 +79,22 @@ public class CoreActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (permissionManager.permissionsResult(requestCode, grantResults)) {
+            tomaFoto();
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
-
         if (id == R.id.capturar) {
-            //Creamos el Intent para llamar a la Camara
-            Intent cameraIntent = new Intent(
-                    android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            //Creamos una carpeta en la memeria del terminal
-            File imagesFolder = new File(Environment.getExternalStorageDirectory(), "sebas");
-            imagesFolder.mkdirs();
-            //añadimos el nombre de la imagen
-            File image = new File(imagesFolder, "cromaoriginal.jpg");
-            Uri uriSavedImage = Uri.fromFile(image);
-            //Le decimos al Intent que queremos grabar la imagen
-            cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uriSavedImage);
-            //Lanzamos la aplicacion de la camara con retorno (forResult)
-
-            startActivityForResult(cameraIntent, captureimage);
+            if (permissionManager.havePermission()) {
+                tomaFoto();
+            } else {
+                permissionManager.requestPermissions();
+            }
             return true;
         }
         if (id == R.id.cargar) {
@@ -96,8 +102,22 @@ public class CoreActivity extends AppCompatActivity {
             startActivityForResult(gallery, loadimage);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    void tomaFoto() {
+        //Creamos el Intent para llamar a la Camara
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        //Creamos una carpeta en la memeria del terminal
+        File imagesFolder = new File(Environment.getExternalStorageDirectory(), "sebas");
+        imagesFolder.mkdirs();
+        //añadimos el nombre de la imagen
+        File image = new File(imagesFolder, "cromaoriginal.jpg");
+        Uri uriSavedImage = Uri.fromFile(image);
+        //Le decimos al Intent que queremos grabar la imagen
+        cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uriSavedImage);
+        //Lanzamos la aplicacion de la camara con retorno (forResult)
+        startActivityForResult(cameraIntent, captureimage);
     }
 
     //Clase donde se muestra la foto en el imageview provenga de la camara o de la galeria
