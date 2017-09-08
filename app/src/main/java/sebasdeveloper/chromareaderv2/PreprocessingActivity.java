@@ -24,12 +24,15 @@ import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfInt;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
 
 import static java.lang.Math.abs;
+import static org.opencv.core.CvType.CV_16S;
+import static org.opencv.core.CvType.CV_64F;
 
 public class PreprocessingActivity extends AppCompatActivity {
     Intent intent;
@@ -39,8 +42,9 @@ public class PreprocessingActivity extends AppCompatActivity {
     Bitmap bmp;
     Mat ima;
     Mat imasinfondo;
-    double[] datocolor={0,0,0};
-    double[] datogray={0};
+    Mat comp;
+    Mat capa1;
+
     //Clase donde se crea el layout y se inicializa la libreria ButterKnife
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,61 +58,31 @@ public class PreprocessingActivity extends AppCompatActivity {
         txt.setText("Nombre:"+nombre+"\n"+"Lugar:"+lugar+"\n"+"Descripción:"+descripcion);
         ima=imread_mat();
         imasinfondo=deletebackground();
-       // ima=rotateima(ima);
-        imwrite_mat(imasinfondo);
+        comp=components(imasinfondo,0);
+        //capa1=segcapa1();
+        // ima=rotateima(ima);
+        imwrite_mat(comp);
         showima();
     }
     public Mat deletebackground(){
+        Mat temp = ima;
         int rows=ima.rows();
         int cols=ima.cols();
         int ch = ima.channels();
-/*/
-     //   double[] pix=ima.get(100,100);
-      //  txt1.setText(Double.toString(pix[0])+" "+Double.toString(pix[1])+" "+Double.toString(pix[2]));
-//
-        {
-            for (int i=0; i<rows; i++)
-            {
-                for (int j=0; j<cols; j++)
-                 {
-                    double[] pix = ima.get(i, j);
-                        if (abs(pix[0] -  pix[1])  < 10 ) {
-                        ima.put(i, j, datocolor);}
-                 }
-            }
-        }
-/*/
-
-        //   double[] pix=ima.get(100,100);
-        //  txt1.setText(Double.toString(pix[0])+" "+Double.toString(pix[1])+" "+Double.toString(pix[2]));
-//
-
+        double[] datocolor={0,0,0};
         {
             for (int i=0; i<rows; i++)
             {
                 for (int j=0; j<cols; j++)
                 {
                     double[] pix = ima.get(i, j);
-                        double[] datocolor={pix[0],0,0};
-                        ima.put(i, j, datocolor);}
+                    if (abs(pix[0] -  pix[1])  < 10 ) {
+                        temp.put(i, j, datocolor);}
+                }
             }
         }
 
-
-  //      Mat imaGray1 = new Mat();
-  //
-
-   //     int rows=imaGray1.rows();
-    //    int cols=imaGray1.cols();
-     //       for (int i=0; i<rows; i++) {
-    //            for (int j=0; j<cols; j++) {
-    //                double[] pix = imaGray1.get(i, j);
-    //                if (pix[0] < 200) {
-     //                   imaGray1.put(i, j, datogray);
-     //               }
-        //          }
-       //     }
-        return ima;
+        return temp;
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -134,11 +108,39 @@ public class PreprocessingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public Mat rotateima(Mat imagen){
-        Core.transpose(imagen,imagen);
-        return imagen;
+    public Mat components(Mat temp, int comp)
+    {
+        Mat temp2 =ima;
+        int rows=temp.rows();
+        int cols=temp.cols();
+        Core.extractChannel(ima,temp2,comp);
+        double[] pix = temp2.get(100, 100);
+        Log.d("myTag",String.valueOf(pix[0]));
+        return temp2;
     }
+/*/
+    public segcapa1()
+    {
 
+        Mat temp = ima;
+        int rows=ima.rows();
+        int cols=ima.cols();
+        int ch = ima.channels();
+        double[] datocolor={0,0,0};
+        {
+            for (int i=0; i<rows; i++)
+            {
+                for (int j=0; j<cols; j++)
+                {
+                    double[] pix = comp.get(i, j);
+                    if (comp<50 ) {
+                        temp.put(i, j, datocolor);}
+                }
+            }
+        }
+
+    }
+/*/
     public Mat imread_mat(){
         Mat imagen;
         //Se lee la foto desde la ubicacion donde fue almacenada en la memoria interna
@@ -155,4 +157,7 @@ public class PreprocessingActivity extends AppCompatActivity {
                 "/sebas/"+"cromapreprocesado.jpg");
         img2.setImageBitmap(bmp);
     }
+
+
+
 }
