@@ -89,7 +89,7 @@ public class PreprocessingActivity extends AppCompatActivity {
                 for (int j=0; j<cols; j++)
                 {
                     double[] pix = ima.get(i, j);
-                        double[] datocolor={pix[0]};
+                        double[] datocolor={pix[0],0,0};
                         ima.put(i, j, datocolor);}
             }
         }

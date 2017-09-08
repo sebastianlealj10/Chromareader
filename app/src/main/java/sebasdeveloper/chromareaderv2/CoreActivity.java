@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.github.jeffersonrojas.materialpermissions.library.PermissionManager;
@@ -57,7 +58,9 @@ public class CoreActivity extends AppCompatActivity {
     Button btn2;
     final static int captureimage = 0;
     final static int loadimage = 1;
-
+    public final static String Nombre = "nombre";
+    public final static String Lugar= "lugar";
+    public final static String Descripcion= "descripcion";
     PermissionManager permissionManager;
 
     @Override
@@ -90,16 +93,20 @@ public class CoreActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.capturar) {
-            if (permissionManager.havePermission()) {
-                tomaFoto();
-            } else {
-                permissionManager.requestPermissions();
-            }
+                if (permissionManager.havePermission()) {
+                    tomaFoto();
+                } else {
+                    permissionManager.requestPermissions();
+                }
             return true;
         }
         if (id == R.id.cargar) {
+            if (permissionManager.havePermission()) {
             Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
             startActivityForResult(gallery, loadimage);
+            } else {
+                permissionManager.requestPermissions();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -163,7 +170,16 @@ public class CoreActivity extends AppCompatActivity {
     // Boton donde se lanza la nueva actividad
     @OnClick(R.id.button2)
     public void processingphoto(View view) {
-        intent = new Intent(this, PreprocessingActivity.class);
+        Intent intent = new Intent(this, PreprocessingActivity.class);
+        EditText editText1 = (EditText) findViewById(R.id.editText1);
+        String nombre = editText1.getText().toString();
+        intent.putExtra(Nombre, nombre);
+        EditText editText2 = (EditText) findViewById(R.id.editText2);
+        String lugar = editText2.getText().toString();
+        intent.putExtra(Lugar, lugar);
+        EditText editText3 = (EditText) findViewById(R.id.editText3);
+        String descripcion = editText3.getText().toString();
+        intent.putExtra(Descripcion, descripcion);
         startActivity(intent);
     }
 
