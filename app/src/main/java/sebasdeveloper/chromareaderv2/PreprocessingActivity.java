@@ -29,9 +29,12 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
+import java.sql.Blob;
 
 import static java.lang.Math.abs;
+import static org.opencv.core.Core.CMP_GT;
 import static org.opencv.core.CvType.CV_16S;
+import static org.opencv.core.CvType.CV_32S;
 import static org.opencv.core.CvType.CV_64F;
 
 public class PreprocessingActivity extends AppCompatActivity {
@@ -42,7 +45,7 @@ public class PreprocessingActivity extends AppCompatActivity {
     Bitmap bmp;
     Mat ima;
     Mat imasinfondo;
-    Mat comp;
+    Mat capa2;
     Mat capa1;
 
     //Clase donde se crea el layout y se inicializa la libreria ButterKnife
@@ -58,10 +61,9 @@ public class PreprocessingActivity extends AppCompatActivity {
         txt.setText("Nombre:"+nombre+"\n"+"Lugar:"+lugar+"\n"+"Descripción:"+descripcion);
         ima=imread_mat();
         imasinfondo=deletebackground();
-        comp=components(imasinfondo,0);
-        //capa1=segcapa1();
+       capa2=segcapa2();
         // ima=rotateima(ima);
-        imwrite_mat(comp);
+        imwrite_mat(capa2);
         showima();
     }
     public Mat deletebackground(){
@@ -108,39 +110,101 @@ public class PreprocessingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public Mat components(Mat temp, int comp)
-    {
-        Mat temp2 =ima;
-        int rows=temp.rows();
-        int cols=temp.cols();
-        Core.extractChannel(ima,temp2,comp);
-        double[] pix = temp2.get(100, 100);
-        Log.d("myTag",String.valueOf(pix[0]));
-        return temp2;
-    }
-/*/
-    public segcapa1()
-    {
 
-        Mat temp = ima;
-        int rows=ima.rows();
-        int cols=ima.cols();
-        int ch = ima.channels();
-        double[] datocolor={0,0,0};
+
+    public Mat segcapa2()
+    {   Mat comp= ima;
+        Mat temp= null;
+        int rows=imasinfondo.rows();
+        int cols=imasinfondo.cols();
+        Core.extractChannel(imasinfondo,comp,0);
+        temp=comp;
+        double[] capab={255};
+        double[] capan={0};
+
         {
             for (int i=0; i<rows; i++)
             {
                 for (int j=0; j<cols; j++)
                 {
                     double[] pix = comp.get(i, j);
-                    if (comp<50 ) {
-                        temp.put(i, j, datocolor);}
+                    if (pix[0]>45 && pix[0]<95  ) {
+                        temp.put(i, j, capab);
+                    }
+                    else
+                        temp.put(i, j, capan);
+                }
+            }
+        }
+        Mat temp2=temp;
+        Mat temp3=temp;
+        Mat temp4=temp;
+     int nLabels=Imgproc.connectedComponents(temp,temp2,4,Imgproc.CC_STAT_AREA);
+     //   Log.d("areas", String.valueOf(nLabels));
+       // Imgproc.threshold(temp,temp2,0,255,0);
+     //   Log.d("regiones", String.valueOf(nLabels));
+       double areas= Imgproc.contourArea(temp2);
+       Log.d("areas", String.valueOf(areas));
+
+        return temp2;
+
+    }
+    public Mat segcapa3()
+    {   Mat comp= ima;
+        Mat temp= null;
+        int rows=imasinfondo.rows();
+        int cols=imasinfondo.cols();
+        Core.extractChannel(imasinfondo,comp,2);
+        temp=comp;
+        double[] capab={255};
+        double[] capan={0};
+
+        {
+            for (int i=0; i<rows; i++)
+            {
+                for (int j=0; j<cols; j++)
+                {
+                    double[] pix = comp.get(i, j);
+                    if (pix[0]>160  ) {
+                        temp.put(i, j, capab);
+                    }
+                    else
+                        temp.put(i, j, capan);
                 }
             }
         }
 
+        return temp;
     }
-/*/
+
+    public Mat segcapa1()
+    {   Mat comp= ima;
+        Mat temp= null;
+        int rows=imasinfondo.rows();
+        int cols=imasinfondo.cols();
+        Core.extractChannel(imasinfondo,comp,2);
+        temp=comp;
+        double[] capab={255};
+        double[] capan={0};
+
+        {
+            for (int i=0; i<rows; i++)
+            {
+                for (int j=0; j<cols; j++)
+                {
+                    double[] pix = comp.get(i, j);
+                    if (pix[0]>110 && pix[0]<160 ) {
+                        temp.put(i, j, capab);
+                    }
+                    else
+                        temp.put(i, j, capan);
+                }
+            }
+        }
+
+        return temp;
+    }
+
     public Mat imread_mat(){
         Mat imagen;
         //Se lee la foto desde la ubicacion donde fue almacenada en la memoria interna
