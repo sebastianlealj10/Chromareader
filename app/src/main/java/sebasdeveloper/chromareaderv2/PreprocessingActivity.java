@@ -25,11 +25,15 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfInt;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
 import java.sql.Blob;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.Math.abs;
 import static org.opencv.core.Core.CMP_GT;
@@ -61,9 +65,9 @@ public class PreprocessingActivity extends AppCompatActivity {
         txt.setText("Nombre:"+nombre+"\n"+"Lugar:"+lugar+"\n"+"Descripción:"+descripcion);
         ima=imread_mat();
         imasinfondo=deletebackground();
-       capa2=segcapa2();
+      // capa2=segcapa2();
         // ima=rotateima(ima);
-        imwrite_mat(capa2);
+        imwrite_mat(ima);
         showima();
     }
     public Mat deletebackground(){
@@ -114,6 +118,7 @@ public class PreprocessingActivity extends AppCompatActivity {
 
     public Mat segcapa2()
     {   Mat comp= ima;
+        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         Mat temp= null;
         int rows=imasinfondo.rows();
         int cols=imasinfondo.cols();
@@ -136,17 +141,19 @@ public class PreprocessingActivity extends AppCompatActivity {
                 }
             }
         }
-        Mat temp2=temp;
-        Mat temp3=temp;
-        Mat temp4=temp;
-     int nLabels=Imgproc.connectedComponents(temp,temp2,4,Imgproc.CC_STAT_AREA);
+
+     //   Mat hierarchy = new Mat();
+     //int nLabels=Imgproc.connectedComponents(temp,temp2,4,Imgproc.CC_STAT_AREA);
+      //  Imgproc.findContours(temp,contours,hierarchy,Imgproc.RETR_TREE,Imgproc.CHAIN_APPROX_SIMPLE);
      //   Log.d("areas", String.valueOf(nLabels));
        // Imgproc.threshold(temp,temp2,0,255,0);
      //   Log.d("regiones", String.valueOf(nLabels));
-       double areas= Imgproc.contourArea(temp2);
-       Log.d("areas", String.valueOf(areas));
 
-        return temp2;
+        //    Imgproc.drawContours(ima, contours, 0, new Scalar(0, 0, 255), -1);
+
+      // Log.d("areas", String.valueOf(areas));
+
+        return ima;
 
     }
     public Mat segcapa3()
