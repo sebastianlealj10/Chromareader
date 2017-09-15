@@ -36,7 +36,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.random;
 import static org.opencv.core.Core.CMP_GT;
+import static org.opencv.core.Core.FILLED;
 import static org.opencv.core.CvType.CV_16S;
 import static org.opencv.core.CvType.CV_32S;
 import static org.opencv.core.CvType.CV_64F;
@@ -65,10 +67,11 @@ public class PreprocessingActivity extends AppCompatActivity {
         txt.setText("Nombre:"+nombre+"\n"+"Lugar:"+lugar+"\n"+"Descripción:"+descripcion);
         ima=imread_mat();
         imasinfondo=deletebackground();
-      // capa2=segcapa2();
+        imwrite_mat(imasinfondo,"cromasinfondo");
+       capa2=segcapa2();
+        imwrite_mat(capa2,"capa2");
         // ima=rotateima(ima);
-        imwrite_mat(ima);
-        showima();
+        showima("capa2");
     }
     public Mat deletebackground(){
         Mat temp = ima;
@@ -120,6 +123,8 @@ public class PreprocessingActivity extends AppCompatActivity {
     {   Mat comp= ima;
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         Mat temp= null;
+        Mat temp2= ima;
+        Mat hierarchy = new Mat();
         int rows=imasinfondo.rows();
         int cols=imasinfondo.cols();
         Core.extractChannel(imasinfondo,comp,0);
@@ -142,18 +147,25 @@ public class PreprocessingActivity extends AppCompatActivity {
             }
         }
 
-     //   Mat hierarchy = new Mat();
+        Imgproc.findContours(temp,contours,hierarchy,Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_SIMPLE);
+        for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++) {
+            Imgproc.drawContours(temp2, contours,250, new Scalar(255*random(), 255*random(),255*random(),random()*2), FILLED);
+            Log.d("areas", String.valueOf(contourIdx));
+        }
+
+
+
      //int nLabels=Imgproc.connectedComponents(temp,temp2,4,Imgproc.CC_STAT_AREA);
-      //  Imgproc.findContours(temp,contours,hierarchy,Imgproc.RETR_TREE,Imgproc.CHAIN_APPROX_SIMPLE);
+
      //   Log.d("areas", String.valueOf(nLabels));
        // Imgproc.threshold(temp,temp2,0,255,0);
      //   Log.d("regiones", String.valueOf(nLabels));
 
-        //    Imgproc.drawContours(ima, contours, 0, new Scalar(0, 0, 255), -1);
+
 
       // Log.d("areas", String.valueOf(areas));
 
-        return ima;
+        return temp2;
 
     }
     public Mat segcapa3()
@@ -219,13 +231,15 @@ public class PreprocessingActivity extends AppCompatActivity {
                 "/sebas/"+"cromaoriginal.jpg");
         return imagen;
     }
-    public void imwrite_mat(Mat imagen){
+    public void imwrite_mat(Mat imagen,String a){
+       String nombre=a+".jpg";
         Imgcodecs.imwrite(Environment.getExternalStorageDirectory()+
-                "/sebas/"+"cromapreprocesado.jpg",imagen);
+                "/sebas/"+nombre,imagen);
     }
-    public void showima(){
+    public void showima(String a){
+        String nombre=a+".jpg";
         bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()+
-                "/sebas/"+"cromapreprocesado.jpg");
+                "/sebas/"+nombre);
         img2.setImageBitmap(bmp);
     }
 
