@@ -146,13 +146,17 @@ public class PreprocessingActivity extends AppCompatActivity {
                 }
             }
         }
-
+        temp2.zeros(rows,cols,0);
         Imgproc.findContours(temp,contours,hierarchy,Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_SIMPLE);
         for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++) {
-            Imgproc.drawContours(temp2, contours,250, new Scalar(255*random(), 255*random(),255*random(),random()*2), FILLED);
-            Log.d("areas", String.valueOf(contourIdx));
+            Imgproc.drawContours(temp2, contours,contourIdx, new Scalar(255, 255,255), FILLED);
+         //   int infor=temp2.type();
+           // double area=Imgproc.contourArea(temp2);
+         //   Log.d("areas.........", String.valueOf(infor));
         }
-
+        int infor=temp2.type();
+        // double area=Imgproc.contourArea(temp2);
+        Log.d("areas.........", String.valueOf(infor));
 
 
      //int nLabels=Imgproc.connectedComponents(temp,temp2,4,Imgproc.CC_STAT_AREA);
