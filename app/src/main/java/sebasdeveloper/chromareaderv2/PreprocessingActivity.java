@@ -26,6 +26,7 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfInt;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -52,7 +53,9 @@ public class PreprocessingActivity extends AppCompatActivity {
     Mat ima;
     Mat imasinfondo;
     Mat capa2;
+    Mat capa3;
     Mat capa1;
+    Mat comp2;
 
     //Clase donde se crea el layout y se inicializa la libreria ButterKnife
     @Override
@@ -68,10 +71,15 @@ public class PreprocessingActivity extends AppCompatActivity {
         ima=imread_mat();
         imasinfondo=deletebackground();
         imwrite_mat(imasinfondo,"cromasinfondo");
-       capa2=segcapa2();
-        imwrite_mat(capa2,"capa2");
+      Core.extractChannel(imasinfondo,comp2,2);
+        //capa2=segcapa2();
+        //imwrite_mat(capa2,"capa2");
+        //capa3=segcapa3();
+        //imwrite_mat(capa3,"capa3");
+       // capa1=segcapa1();
+        //imwrite_mat(capa1,"capa1");
         // ima=rotateima(ima);
-        showima("capa2");
+        showima("capa3");
     }
     public Mat deletebackground(){
         Mat temp = ima;
@@ -122,6 +130,7 @@ public class PreprocessingActivity extends AppCompatActivity {
     public Mat segcapa2()
     {   Mat comp= ima;
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+        Point a= new Point(0,0);
         Mat temp= null;
         Mat temp2= ima;
         Mat hierarchy = new Mat();
@@ -132,12 +141,11 @@ public class PreprocessingActivity extends AppCompatActivity {
         double[] capab={255};
         double[] capan={0};
 
-        {
             for (int i=0; i<rows; i++)
             {
                 for (int j=0; j<cols; j++)
                 {
-                    double[] pix = comp.get(i, j);
+                    double[] pix = temp.get(i, j);
                     if (pix[0]>45 && pix[0]<95  ) {
                         temp.put(i, j, capab);
                     }
@@ -145,39 +153,30 @@ public class PreprocessingActivity extends AppCompatActivity {
                         temp.put(i, j, capan);
                 }
             }
-        }
         temp2.zeros(rows,cols,0);
-        Imgproc.findContours(temp,contours,hierarchy,Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_SIMPLE);
+        Imgproc.findContours(temp,contours,hierarchy,Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_NONE);
         for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++) {
-            Imgproc.drawContours(temp2, contours,contourIdx, new Scalar(255, 255,255), FILLED);
-         //   int infor=temp2.type();
-           // double area=Imgproc.contourArea(temp2);
-         //   Log.d("areas.........", String.valueOf(infor));
+            Mat area=contours.get(contourIdx);
+            double area2=Imgproc.contourArea(area);
+            if (area2<30000) {
+                Imgproc.drawContours(temp2, contours,contourIdx, new Scalar(0, 0,0),-1,8,hierarchy,0,a);
+                Log.d("area", String.valueOf(area2));
+              //  temp2=contours.get(contourIdx);
+            }
         }
-        int infor=temp2.type();
-        // double area=Imgproc.contourArea(temp2);
-        Log.d("areas.........", String.valueOf(infor));
-
-
-     //int nLabels=Imgproc.connectedComponents(temp,temp2,4,Imgproc.CC_STAT_AREA);
-
-     //   Log.d("areas", String.valueOf(nLabels));
-       // Imgproc.threshold(temp,temp2,0,255,0);
-     //   Log.d("regiones", String.valueOf(nLabels));
-
-
-
-      // Log.d("areas", String.valueOf(areas));
 
         return temp2;
 
     }
     public Mat segcapa3()
     {   Mat comp= ima;
+
+        Point a= new Point(0,0);
         Mat temp= null;
         int rows=imasinfondo.rows();
+        Mat hierarchy = new Mat();
         int cols=imasinfondo.cols();
-        Core.extractChannel(imasinfondo,comp,2);
+        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         temp=comp;
         double[] capab={255};
         double[] capan={0};
@@ -187,7 +186,7 @@ public class PreprocessingActivity extends AppCompatActivity {
             {
                 for (int j=0; j<cols; j++)
                 {
-                    double[] pix = comp.get(i, j);
+                    double[] pix = temp.get(i, j);
                     if (pix[0]>160  ) {
                         temp.put(i, j, capab);
                     }
@@ -196,8 +195,20 @@ public class PreprocessingActivity extends AppCompatActivity {
                 }
             }
         }
+        Mat temp2=temp;
+        temp2.zeros(rows,cols,0);
+        Imgproc.findContours(temp,contours,hierarchy,Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_NONE);
+        for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++) {
+            Mat area=contours.get(contourIdx);
+            double area2=Imgproc.contourArea(area);
+            if (area2<179380.0) {
+                Imgproc.drawContours(temp2, contours,contourIdx, new Scalar(0, 0,0),-1,8,hierarchy,0,a);
+                Log.d("area", String.valueOf(area2));
+                //  temp2=contours.get(contourIdx);
+            }
+        }
 
-        return temp;
+        return temp2;
     }
 
     public Mat segcapa1()
@@ -205,11 +216,10 @@ public class PreprocessingActivity extends AppCompatActivity {
         Mat temp= null;
         int rows=imasinfondo.rows();
         int cols=imasinfondo.cols();
-        Core.extractChannel(imasinfondo,comp,2);
         temp=comp;
         double[] capab={255};
         double[] capan={0};
-
+/*/
         {
             for (int i=0; i<rows; i++)
             {
@@ -217,15 +227,15 @@ public class PreprocessingActivity extends AppCompatActivity {
                 {
                     double[] pix = comp.get(i, j);
                     if (pix[0]>110 && pix[0]<160 ) {
-                        temp.put(i, j, capab);
+                        comp.put(i, j, capab);
                     }
                     else
-                        temp.put(i, j, capan);
+                        comp.put(i, j, capan);
                 }
             }
         }
-
-        return temp;
+/*/
+        return comp;
     }
 
     public Mat imread_mat(){
