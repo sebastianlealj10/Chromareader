@@ -23,26 +23,24 @@ public class MineralActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mineral);
         ButterKnife.bind(this);
-        ima=imread_mat();
-        imwrite_mat(ima);
-        showima();
+        procesarcroma();
     }
-
-
-    public Mat imread_mat(){
+    public void procesarcroma() {
+        ima=imread_mat("capa3");
+        showima("capa3");
+    }
+    public Mat imread_mat(String a){
         Mat imagen;
+        String nombre=a+".jpg";
         //Se lee la foto desde la ubicacion donde fue almacenada en la memoria interna
         imagen = Imgcodecs.imread(Environment.getExternalStorageDirectory()+
-                "/sebas/"+"cromapreprocesado.jpg");
+                "/sebas/"+nombre);
         return imagen;
     }
-    public void imwrite_mat(Mat imagen){
-        Imgcodecs.imwrite(Environment.getExternalStorageDirectory()+
-                "/sebas/"+"capamineral.jpg",imagen);
-    }
-    public void showima(){
+    public void showima(String a){
+        String nombre=a+".jpg";
         bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()+
-                "/sebas/"+"capamineral.jpg");
+                "/sebas/"+nombre);
         img.setImageBitmap(bmp);
     }
 }

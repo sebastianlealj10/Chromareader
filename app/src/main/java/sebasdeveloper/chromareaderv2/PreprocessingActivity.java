@@ -55,7 +55,6 @@ public class PreprocessingActivity extends AppCompatActivity {
     Mat capa2;
     Mat capa3;
     Mat capa1;
-    Mat comp2;
 
     //Clase donde se crea el layout y se inicializa la libreria ButterKnife
     @Override
@@ -68,38 +67,7 @@ public class PreprocessingActivity extends AppCompatActivity {
         String lugar = intent.getStringExtra(CoreActivity.Lugar);
         String descripcion = intent.getStringExtra(CoreActivity.Descripcion);
         txt.setText("Nombre:"+nombre+"\n"+"Lugar:"+lugar+"\n"+"Descripción:"+descripcion);
-        ima=imread_mat();
-        imasinfondo=deletebackground();
-        imwrite_mat(imasinfondo,"cromasinfondo");
-      Core.extractChannel(imasinfondo,comp2,2);
-        //capa2=segcapa2();
-        //imwrite_mat(capa2,"capa2");
-        //capa3=segcapa3();
-        //imwrite_mat(capa3,"capa3");
-       // capa1=segcapa1();
-        //imwrite_mat(capa1,"capa1");
-        // ima=rotateima(ima);
-        showima("capa3");
-    }
-    public Mat deletebackground(){
-        Mat temp = ima;
-        int rows=ima.rows();
-        int cols=ima.cols();
-        int ch = ima.channels();
-        double[] datocolor={0,0,0};
-        {
-            for (int i=0; i<rows; i++)
-            {
-                for (int j=0; j<cols; j++)
-                {
-                    double[] pix = ima.get(i, j);
-                    if (abs(pix[0] -  pix[1])  < 10 ) {
-                        temp.put(i, j, datocolor);}
-                }
-            }
-        }
-
-        return temp;
+        procesarcroma();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -124,20 +92,48 @@ public class PreprocessingActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    public void procesarcroma() {
+        ima=imread_mat("cromaoriginal");
+        imasinfondo=deletebackground();
+        imwrite_mat(imasinfondo,"cromasinfondo");
+        capa2=segcapa2();
+        imwrite_mat(capa2,"capa2");
+        capa3=segcapa3();
+        imwrite_mat(capa3,"capa3");
+        capa1=segcapa1();
+        imwrite_mat(capa1,"capa1");
+        showima("capa2");
+    }
+    public Mat deletebackground(){;
+        Mat temp = ima;
+        int rows=ima.rows();
+        int cols=ima.cols();
+        int ch = ima.channels();
+        double[] datocolor={0,0,0};
+        {
+            for (int i=0; i<rows; i++)
+            {
+                for (int j=0; j<cols; j++)
+                {
+                    double[] pix = ima.get(i, j);
+                    if (abs(pix[0] -  pix[1])  < 10 ) {
+                        temp.put(i, j, datocolor);}
+                }
+            }
+        }
 
-
-
+        return temp;
+    }
     public Mat segcapa2()
-    {   Mat comp= ima;
+    {
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         Point a= new Point(0,0);
-        Mat temp= null;
-        Mat temp2= ima;
+        Mat temp;
         Mat hierarchy = new Mat();
         int rows=imasinfondo.rows();
         int cols=imasinfondo.cols();
-        Core.extractChannel(imasinfondo,comp,0);
-        temp=comp;
+        temp=componente(0);
+        Mat temp2= temp;
         double[] capab={255};
         double[] capan={0};
 
@@ -153,34 +149,31 @@ public class PreprocessingActivity extends AppCompatActivity {
                         temp.put(i, j, capan);
                 }
             }
+
         temp2.zeros(rows,cols,0);
         Imgproc.findContours(temp,contours,hierarchy,Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_NONE);
         for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++) {
             Mat area=contours.get(contourIdx);
             double area2=Imgproc.contourArea(area);
             if (area2<30000) {
-                Imgproc.drawContours(temp2, contours,contourIdx, new Scalar(0, 0,0),-1,8,hierarchy,0,a);
-                Log.d("area", String.valueOf(area2));
+                Imgproc.drawContours(temp, contours,contourIdx, new Scalar(0, 0,0),-1,8,hierarchy,0,a);
+               // Log.d("area", String.valueOf(area2));
               //  temp2=contours.get(contourIdx);
             }
         }
 
-        return temp2;
+        return temp;
 
     }
     public Mat segcapa3()
-    {   Mat comp= ima;
-
-        Point a= new Point(0,0);
-        Mat temp= null;
+    {   Point a= new Point(0,0);
         int rows=imasinfondo.rows();
         Mat hierarchy = new Mat();
         int cols=imasinfondo.cols();
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
-        temp=comp;
+        Mat temp=componente(2);
         double[] capab={255};
         double[] capan={0};
-
         {
             for (int i=0; i<rows; i++)
             {
@@ -195,54 +188,73 @@ public class PreprocessingActivity extends AppCompatActivity {
                 }
             }
         }
-        Mat temp2=temp;
-        temp2.zeros(rows,cols,0);
+
         Imgproc.findContours(temp,contours,hierarchy,Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_NONE);
         for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++) {
             Mat area=contours.get(contourIdx);
             double area2=Imgproc.contourArea(area);
             if (area2<179380.0) {
-                Imgproc.drawContours(temp2, contours,contourIdx, new Scalar(0, 0,0),-1,8,hierarchy,0,a);
-                Log.d("area", String.valueOf(area2));
+                Imgproc.drawContours(temp, contours,contourIdx, new Scalar(0, 0,0),-1,8,hierarchy,0,a);
+                //Log.d("area", String.valueOf(area2));
                 //  temp2=contours.get(contourIdx);
             }
         }
-
-        return temp2;
+        return temp;
     }
 
     public Mat segcapa1()
-    {   Mat comp= ima;
-        Mat temp= null;
+    {
+        Mat temp;
+        Point a= new Point(0,0);
+        Mat hierarchy = new Mat();
+        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         int rows=imasinfondo.rows();
         int cols=imasinfondo.cols();
-        temp=comp;
+        temp=componente(2);
         double[] capab={255};
         double[] capan={0};
-/*/
-        {
             for (int i=0; i<rows; i++)
             {
                 for (int j=0; j<cols; j++)
                 {
-                    double[] pix = comp.get(i, j);
+                    double[] pix = temp.get(i, j);
                     if (pix[0]>110 && pix[0]<160 ) {
-                        comp.put(i, j, capab);
+                        temp.put(i, j, capab);
                     }
                     else
-                        comp.put(i, j, capan);
+                        temp.put(i, j, capan);
+                }
+            }
+
+        for (int i=0; i<rows; i++)
+        {
+            for (int j=0; j<cols; j++)
+            {
+                double[] pix = capa2.get(i, j);
+                if (pix[0]>0 ) {
+                    temp.put(i, j, capan);
                 }
             }
         }
-/*/
-        return comp;
+        Imgproc.findContours(temp,contours,hierarchy,Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_NONE);
+        for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++) {
+            Mat area=contours.get(contourIdx);
+            double area2=Imgproc.contourArea(area);
+            if (area2<23000) {
+                Imgproc.drawContours(temp, contours,contourIdx, new Scalar(0, 0,0),-1,8,hierarchy,0,a);
+                Log.d("area", String.valueOf(area2));
+                //  temp2=contours.get(contourIdx);
+            }
+        }
+        return temp;
     }
 
-    public Mat imread_mat(){
+    public Mat imread_mat(String a){
         Mat imagen;
+        String nombre=a+".jpg";
         //Se lee la foto desde la ubicacion donde fue almacenada en la memoria interna
         imagen = Imgcodecs.imread(Environment.getExternalStorageDirectory()+
-                "/sebas/"+"cromaoriginal.jpg");
+                "/sebas/"+nombre);
         return imagen;
     }
     public void imwrite_mat(Mat imagen,String a){
@@ -257,6 +269,12 @@ public class PreprocessingActivity extends AppCompatActivity {
         img2.setImageBitmap(bmp);
     }
 
-
-
+    public Mat componente(int c){
+        Mat imagen=ima;
+        List<Mat> canales = new ArrayList<Mat>();
+        imagen.zeros(ima.size(),ima.type());
+        Core.split(imasinfondo,canales);
+        imagen=canales.get(c);
+        return imagen;
+    }
 }
