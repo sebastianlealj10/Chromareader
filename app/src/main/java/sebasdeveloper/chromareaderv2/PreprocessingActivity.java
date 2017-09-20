@@ -102,7 +102,7 @@ public class PreprocessingActivity extends AppCompatActivity {
         imwrite_mat(capa3,"capa3");
         capa1=segcapa1();
         imwrite_mat(capa1,"capa1");
-        showima("capa2");
+        showima("capa3");
     }
     public Mat deletebackground(){;
         Mat temp = ima;
@@ -126,79 +126,15 @@ public class PreprocessingActivity extends AppCompatActivity {
     }
     public Mat segcapa2()
     {
-        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
-        Point a= new Point(0,0);
-        Mat temp;
-        Mat hierarchy = new Mat();
-        int rows=imasinfondo.rows();
-        int cols=imasinfondo.cols();
-        temp=componente(0);
-        Mat temp2= temp;
-        double[] capab={255};
-        double[] capan={0};
-
-            for (int i=0; i<rows; i++)
-            {
-                for (int j=0; j<cols; j++)
-                {
-                    double[] pix = temp.get(i, j);
-                    if (pix[0]>45 && pix[0]<95  ) {
-                        temp.put(i, j, capab);
-                    }
-                    else
-                        temp.put(i, j, capan);
-                }
-            }
-
-        temp2.zeros(rows,cols,0);
-        Imgproc.findContours(temp,contours,hierarchy,Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_NONE);
-        for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++) {
-            Mat area=contours.get(contourIdx);
-            double area2=Imgproc.contourArea(area);
-            if (area2<30000) {
-                Imgproc.drawContours(temp, contours,contourIdx, new Scalar(0, 0,0),-1,8,hierarchy,0,a);
-               // Log.d("area", String.valueOf(area2));
-              //  temp2=contours.get(contourIdx);
-            }
-        }
-
+        Mat temp=componente(0);
+        temp=threshing(temp,45,95);
+        temp=fillholes(temp,30000);
         return temp;
-
     }
     public Mat segcapa3()
-    {   Point a= new Point(0,0);
-        int rows=imasinfondo.rows();
-        Mat hierarchy = new Mat();
-        int cols=imasinfondo.cols();
-        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
-        Mat temp=componente(2);
-        double[] capab={255};
-        double[] capan={0};
-        {
-            for (int i=0; i<rows; i++)
-            {
-                for (int j=0; j<cols; j++)
-                {
-                    double[] pix = temp.get(i, j);
-                    if (pix[0]>160  ) {
-                        temp.put(i, j, capab);
-                    }
-                    else
-                        temp.put(i, j, capan);
-                }
-            }
-        }
-
-        Imgproc.findContours(temp,contours,hierarchy,Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_NONE);
-        for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++) {
-            Mat area=contours.get(contourIdx);
-            double area2=Imgproc.contourArea(area);
-            if (area2<179380.0) {
-                Imgproc.drawContours(temp, contours,contourIdx, new Scalar(0, 0,0),-1,8,hierarchy,0,a);
-                //Log.d("area", String.valueOf(area2));
-                //  temp2=contours.get(contourIdx);
-            }
-        }
+    {    Mat temp=componente(2);
+        temp=threshing(temp,160,256);
+        temp=fillholes(temp,80000);
         return temp;
     }
 
@@ -236,16 +172,18 @@ public class PreprocessingActivity extends AppCompatActivity {
                 }
             }
         }
+
         Imgproc.findContours(temp,contours,hierarchy,Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_NONE);
         for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++) {
             Mat area=contours.get(contourIdx);
             double area2=Imgproc.contourArea(area);
             if (area2<23000) {
                 Imgproc.drawContours(temp, contours,contourIdx, new Scalar(0, 0,0),-1,8,hierarchy,0,a);
-                Log.d("area", String.valueOf(area2));
+                //Log.d("area", String.valueOf(area2));
                 //  temp2=contours.get(contourIdx);
             }
         }
+
         return temp;
     }
 
@@ -276,5 +214,42 @@ public class PreprocessingActivity extends AppCompatActivity {
         Core.split(imasinfondo,canales);
         imagen=canales.get(c);
         return imagen;
+    }
+    public Mat fillholes(Mat tempp,int areas){
+        tempp.zeros(ima.size(),ima.type());
+        Point a= new Point(0,0);
+        Mat hierarchy = new Mat();
+        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+        Imgproc.findContours(tempp,contours,hierarchy,Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_NONE);
+        for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++) {
+            Mat area=contours.get(contourIdx);
+            double area2=Imgproc.contourArea(area);
+            if (area2<areas) {
+                Imgproc.drawContours(tempp, contours,contourIdx, new Scalar(0, 0,0),-1,8,hierarchy,0,a);
+                // Log.d("area", String.valueOf(area2));
+                //  temp2=contours.get(contourIdx);
+            }
+        }
+        return tempp;
+    }
+    public Mat threshing(Mat tempp,int thresh1,int thresh2){
+        int rows=imasinfondo.rows();
+        int cols=imasinfondo.cols();
+        double[] capab={255};
+        double[] capan={0};
+
+        for (int i=0; i<rows; i++)
+        {
+            for (int j=0; j<cols; j++)
+            {
+                double[] pix = tempp.get(i, j);
+                if (pix[0]>thresh1 && pix[0]<thresh2  ) {
+                    tempp.put(i, j, capab);
+                }
+                else
+                    tempp.put(i, j, capan);
+            }
+        }
+        return tempp;
     }
 }
