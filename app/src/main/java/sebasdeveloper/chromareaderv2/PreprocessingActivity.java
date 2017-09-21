@@ -102,7 +102,7 @@ public class PreprocessingActivity extends AppCompatActivity {
         imwrite_mat(capa3,"capa3");
         capa1=segcapa1();
         imwrite_mat(capa1,"capa1");
-        showima("capa1");
+        showima("cromasinfondo");
     }
     public Mat deletebackground(){;
         Mat temp = ima;

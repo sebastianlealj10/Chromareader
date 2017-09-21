@@ -45,19 +45,19 @@ public class OrganicActivity extends AppCompatActivity {
             String nombre = a + ".jpg";
             bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() +
                     "/sebas/" + nombre);
-            img1.setImageBitmap(bmp);
+            img2.setImageBitmap(bmp);
         }
         if (a=="capa2") {
             String nombre = a + ".jpg";
             bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() +
                     "/sebas/" + nombre);
-            img2.setImageBitmap(bmp);
+            img3.setImageBitmap(bmp);
         }
         if (a=="capa3") {
             String nombre = a + ".jpg";
             bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() +
                     "/sebas/" + nombre);
-            img3.setImageBitmap(bmp);
+            img1.setImageBitmap(bmp);
         }
     }
 }
