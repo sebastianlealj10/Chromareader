@@ -16,8 +16,9 @@ import butterknife.ButterKnife;
 public class OrganicActivity extends AppCompatActivity {
     Mat ima;
     Bitmap bmp;
-    @BindView(R.id.image4) ImageView img;
-
+    @BindView(R.id.imageView1) ImageView img1;
+    @BindView(R.id.imageView2) ImageView img2;
+    @BindView(R.id.imageView3) ImageView img3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +29,8 @@ public class OrganicActivity extends AppCompatActivity {
     public void procesarcroma() {
         ima=imread_mat("capa1");
         showima("capa1");
+        showima("capa2");
+        showima("capa3");
     }
     public Mat imread_mat(String a){
         Mat imagen;
@@ -38,9 +41,23 @@ public class OrganicActivity extends AppCompatActivity {
         return imagen;
     }
     public void showima(String a){
-        String nombre=a+".jpg";
-        bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()+
-                "/sebas/"+nombre);
-        img.setImageBitmap(bmp);
+        if (a=="capa1") {
+            String nombre = a + ".jpg";
+            bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() +
+                    "/sebas/" + nombre);
+            img1.setImageBitmap(bmp);
+        }
+        if (a=="capa2") {
+            String nombre = a + ".jpg";
+            bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() +
+                    "/sebas/" + nombre);
+            img2.setImageBitmap(bmp);
+        }
+        if (a=="capa3") {
+            String nombre = a + ".jpg";
+            bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() +
+                    "/sebas/" + nombre);
+            img3.setImageBitmap(bmp);
+        }
     }
 }

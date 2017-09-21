@@ -45,7 +45,6 @@ public class CoreActivity extends AppCompatActivity {
             Log.d(TAG, "OpenCV loaded");
         }
     }
-
     Uri imageUri;
     Intent i;
     Intent intent;
