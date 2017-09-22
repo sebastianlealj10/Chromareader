@@ -16,9 +16,9 @@ import butterknife.ButterKnife;
 public class OrganicActivity extends AppCompatActivity {
     Mat ima;
     Bitmap bmp;
-    @BindView(R.id.imageView1) ImageView img1;
-    @BindView(R.id.imageView2) ImageView img2;
-    @BindView(R.id.imageView3) ImageView img3;
+    @BindView(R.id.imageButton1) ImageView img1;
+    @BindView(R.id.imageButton2) ImageView img2;
+    @BindView(R.id.imageButton3) ImageView img3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,19 +45,20 @@ public class OrganicActivity extends AppCompatActivity {
             String nombre = a + ".jpg";
             bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() +
                     "/sebas/" + nombre);
-            img2.setImageBitmap(bmp);
+            img1.setImageBitmap(bmp);
         }
         if (a=="capa2") {
             String nombre = a + ".jpg";
             bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() +
                     "/sebas/" + nombre);
-            img3.setImageBitmap(bmp);
+            img2.setImageBitmap(bmp);
         }
         if (a=="capa3") {
             String nombre = a + ".jpg";
             bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() +
                     "/sebas/" + nombre);
-            img1.setImageBitmap(bmp);
+            img3.setImageBitmap(bmp);
         }
     }
 }
+

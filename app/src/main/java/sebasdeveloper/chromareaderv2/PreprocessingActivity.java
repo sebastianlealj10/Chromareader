@@ -94,13 +94,51 @@ public class PreprocessingActivity extends AppCompatActivity {
     }
     public void procesarcroma() {
         ima=imread_mat("cromaoriginal");
+        int threshb1=45;
+        int threshb2=95;
+        int threshr1=160;
+        int threshr2=110;
         imasinfondo=deletebackground();
+        capa1=Mat.zeros(imasinfondo.size(),0);
+        capa2=Mat.zeros(imasinfondo.size(),0);
+        capa3=Mat.zeros(imasinfondo.size(),0);
         imwrite_mat(imasinfondo,"cromasinfondo");
-        capa2=segcapa2();
+        int rows=imasinfondo.rows();
+        int cols=imasinfondo.cols();
+        double[] capab={255};
+        double[] capan={0};
+        Mat compb=componente(0);
+        Mat compr=componente(2);
+        for (int i=0; i<rows; i++)
+        {
+            for (int j=0; j<cols; j++)
+            {
+                double[] pixb = compb.get(i, j);
+                double[] pixr = compr.get(i, j);
+                if (pixb[0]>threshb1 && pixb[0]<threshb2  ) {
+                    capa2.put(i, j, capab);
+                }
+                else
+                    capa2.put(i, j, capan);
+                if (pixr[0]>threshr1 ) {
+                    capa3.put(i, j, capab);
+                }
+                else
+                    capa3.put(i, j, capan);
+                if (pixr[0]>threshr2 && pixr[0]<threshr1  ) {
+                    capa1.put(i, j, capab);
+                }
+                else
+                    capa1.put(i, j, capan);
+            }
+
+        }
+
+        capa2=segcapa2(capa2);
         imwrite_mat(capa2,"capa2");
-        capa3=segcapa3();
+        capa3=segcapa3(capa3);
         imwrite_mat(capa3,"capa3");
-        capa1=segcapa1();
+        capa1=segcapa1(capa1);
         imwrite_mat(capa1,"capa1");
         showima("cromasinfondo");
     }
@@ -124,27 +162,26 @@ public class PreprocessingActivity extends AppCompatActivity {
 
         return temp;
     }
-    public Mat segcapa2()
+    public Mat segcapa2(Mat temp)
     {
-        Mat temp=componente(0);
-        temp=threshing(temp,45,95);
+      //  Mat temp=componente(0);
+       // temp=threshing(temp,45,95);
         temp=fillholes(temp,30000);
         return temp;
     }
-    public Mat segcapa3()
-    {   Mat temp=componente(2);
-        temp=threshing(temp,160,256);
+    public Mat segcapa3(Mat temp)
+    {   //Mat temp=componente(2);
+        //temp=threshing(temp,160,256);
         temp=fillholes(temp,80000);
         return temp;
     }
 
-    public Mat segcapa1()
+    public Mat segcapa1(Mat temp)
     {
-        Mat temp;
     int rows=imasinfondo.rows();
     int cols=imasinfondo.cols();
-    temp=componente(2);
-    temp=threshing(temp,110,160);
+    //temp=componente(2);
+    //temp=threshing(temp,110,160);
     double[] capab={255};
     double[] capan={0};
         for (int i=0; i<rows; i++)
@@ -202,26 +239,6 @@ public class PreprocessingActivity extends AppCompatActivity {
                 Imgproc.drawContours(tempp, contours,contourIdx, new Scalar(0, 0,0),-1,8,hierarchy,0,a);
                 // Log.d("area", String.valueOf(area2));
                 //  temp2=contours.get(contourIdx);
-            }
-        }
-        return tempp;
-    }
-    public Mat threshing(Mat tempp,int thresh1,int thresh2){
-        int rows=imasinfondo.rows();
-        int cols=imasinfondo.cols();
-        double[] capab={255};
-        double[] capan={0};
-
-        for (int i=0; i<rows; i++)
-        {
-            for (int j=0; j<cols; j++)
-            {
-                double[] pix = tempp.get(i, j);
-                if (pix[0]>thresh1 && pix[0]<thresh2  ) {
-                    tempp.put(i, j, capab);
-                }
-                else
-                    tempp.put(i, j, capan);
             }
         }
         return tempp;
