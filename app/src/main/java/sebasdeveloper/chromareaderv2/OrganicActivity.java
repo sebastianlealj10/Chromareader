@@ -5,10 +5,18 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +36,7 @@ public class OrganicActivity extends AppCompatActivity {
     }
     public void procesarcroma() {
         ima=imread_mat("capa1");
+        ima=fillholes(ima,100000000);
         showima("capa1");
         showima("capa2");
         showima("capa3");
@@ -59,6 +68,23 @@ public class OrganicActivity extends AppCompatActivity {
                     "/sebas/" + nombre);
             img3.setImageBitmap(bmp);
         }
+    }
+    public Mat fillholes(Mat tempp,int areas){
+        tempp.zeros(ima.size(),ima.type());
+        Point a= new Point(0,0);
+        Mat hierarchy = new Mat();
+        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+        Imgproc.findContours(tempp,contours,hierarchy,Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_NONE);
+        for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++) {
+            Mat area=contours.get(contourIdx);
+            double area2=Imgproc.contourArea(area);
+            if (area2<areas) {
+                Imgproc.drawContours(tempp, contours,contourIdx, new Scalar(0, 0,0),-1,8,hierarchy,0,a);
+                Log.d("area", String.valueOf(area2));
+                //  temp2=contours.get(contourIdx);
+            }
+        }
+        return tempp;
     }
 }
 
