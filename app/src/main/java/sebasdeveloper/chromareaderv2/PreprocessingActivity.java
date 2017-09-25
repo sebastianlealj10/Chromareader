@@ -55,7 +55,7 @@ public class PreprocessingActivity extends AppCompatActivity {
     Mat capa2;
     Mat capa3;
     Mat capa1;
-
+    int cont=1;
     //Clase donde se crea el layout y se inicializa la libreria ButterKnife
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,6 +228,7 @@ public class PreprocessingActivity extends AppCompatActivity {
     }
     public Mat fillholes(Mat tempp,int areas){
         tempp.zeros(ima.size(),ima.type());
+        double areatotal=0;
         Point a= new Point(0,0);
         Mat hierarchy = new Mat();
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
@@ -240,7 +241,12 @@ public class PreprocessingActivity extends AppCompatActivity {
                 // Log.d("area", String.valueOf(area2));
                 //  temp2=contours.get(contourIdx);
             }
+            else
+               areatotal=areatotal+area2;
+
         }
+        Log.d("area"+cont, String.valueOf(areatotal));
+        cont=cont+1;
         return tempp;
     }
 }
