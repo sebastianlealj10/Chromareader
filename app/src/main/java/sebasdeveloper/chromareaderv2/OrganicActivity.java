@@ -1,13 +1,19 @@
 package sebasdeveloper.chromareaderv2;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
@@ -20,23 +26,39 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static sebasdeveloper.chromareaderv2.PreprocessingActivity.Areas1;
+import static sebasdeveloper.chromareaderv2.PreprocessingActivity.Areas2;
 
 public class OrganicActivity extends AppCompatActivity {
     Mat ima;
     Bitmap bmp;
     @BindView(R.id.imageButton1) ImageView img1;
+
     @BindView(R.id.imageButton2) ImageView img2;
+
     @BindView(R.id.imageButton3) ImageView img3;
+
+    @BindView(R.id.textView5) TextView textarea1;
+    @BindView(R.id.textView11) TextView textarea2;
+    @BindView(R.id.textView22) TextView textarea3;
+    String Areatotal1;
+    String Areatotal2;
+    String Areatotal3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_organic);
         ButterKnife.bind(this);
         procesarcroma();
+        double a=0;
+        Intent intent = getIntent();
+        Areatotal1 = intent.getStringExtra(PreprocessingActivity.Areas1).toString();
+        Areatotal2 = intent.getStringExtra(PreprocessingActivity.Areas2).toString();
+        Areatotal3 = intent.getStringExtra(PreprocessingActivity.Areas3).toString();
     }
     public void procesarcroma() {
-        ima=imread_mat("capa1");
-        ima=fillholes(ima,100000000);
         showima("capa1");
         showima("capa2");
         showima("capa3");
@@ -55,6 +77,7 @@ public class OrganicActivity extends AppCompatActivity {
             bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() +
                     "/sebas/" + nombre);
             img1.setImageBitmap(bmp);
+
         }
         if (a=="capa2") {
             String nombre = a + ".jpg";
@@ -68,23 +91,29 @@ public class OrganicActivity extends AppCompatActivity {
                     "/sebas/" + nombre);
             img3.setImageBitmap(bmp);
         }
-    }
-    public Mat fillholes(Mat tempp,int areas){
-        tempp.zeros(ima.size(),ima.type());
-        Point a= new Point(0,0);
-        Mat hierarchy = new Mat();
-        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
-        Imgproc.findContours(tempp,contours,hierarchy,Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_NONE);
-        for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++) {
-            Mat area=contours.get(contourIdx);
-            double area2=Imgproc.contourArea(area);
-            if (area2<areas) {
-                Imgproc.drawContours(tempp, contours,contourIdx, new Scalar(0, 0,0),-1,8,hierarchy,0,a);
-                Log.d("area", String.valueOf(area2));
-                //  temp2=contours.get(contourIdx);
-            }
+        if (a=="prueb") {
+            String nombre = a + ".jpg";
+            bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() +
+                    "/sebas/" + nombre);
+            img1.setImageBitmap(bmp);
         }
-        return tempp;
+    }
+    public void imwrite_mat(Mat imagen,String a){
+        String nombre=a+".jpg";
+        Imgcodecs.imwrite(Environment.getExternalStorageDirectory()+
+                "/sebas/"+nombre,imagen);
+    }
+    @OnClick(R.id.imageButton1)
+    public void datoscapa1(View view) {
+        textarea1.setText(Areatotal1);
+    }
+    @OnClick(R.id.imageButton2)
+    public void datoscapa2(View view) {
+        textarea2.setText(Areatotal2);
+    }
+    @OnClick(R.id.imageButton3)
+    public void datoscapa3(View view) {
+        textarea3.setText(Areatotal3);
     }
 }
 

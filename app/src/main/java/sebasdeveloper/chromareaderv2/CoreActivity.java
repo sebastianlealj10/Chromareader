@@ -38,6 +38,7 @@ public class CoreActivity extends AppCompatActivity {
     //Clase para inicializar la libreria opencv
     private static final String TAG = "MainActivity";
 
+
     static {
         if (!OpenCVLoader.initDebug()) {
             Log.d(TAG, "OpenCV not loaded");

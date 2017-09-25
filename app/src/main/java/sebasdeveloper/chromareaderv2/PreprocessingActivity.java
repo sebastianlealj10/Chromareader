@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Size;
+import android.support.annotation.StringDef;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +31,7 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.imgproc.Moments;
 
 import java.io.File;
 import java.sql.Blob;
@@ -46,6 +48,12 @@ import static org.opencv.core.CvType.CV_64F;
 
 public class PreprocessingActivity extends AppCompatActivity {
     Intent intent;
+    public static String Areas1 = "area1";
+    public static String Areas2= "area2";
+    public static String Areas3= "area3";
+    Double Area1=0.0;
+    Double Area2=0.0;
+    Double Area3=0.0;
     //Bindeo para el imageview
     @BindView(R.id.image2) ImageView img2;
     @BindView(R.id.textView) TextView txt;
@@ -85,6 +93,9 @@ public class PreprocessingActivity extends AppCompatActivity {
         }
         if (id == R.id.procesamiento) {
             intent = new Intent(this, OrganicActivity.class);
+            intent.putExtra(Areas1, Area1.toString());
+            intent.putExtra(Areas2,Area2.toString());
+            intent.putExtra(Areas3,Area3.toString());
             startActivity(intent);
         }
         if (id == R.id.derechos) {
@@ -92,6 +103,7 @@ public class PreprocessingActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     public void procesarcroma() {
         ima=imread_mat("cromaoriginal");
         int threshb1=45;
@@ -243,10 +255,22 @@ public class PreprocessingActivity extends AppCompatActivity {
             }
             else
                areatotal=areatotal+area2;
+            Log.d("area", String.valueOf(areatotal));
 
         }
-        Log.d("area"+cont, String.valueOf(areatotal));
-        cont=cont+1;
+        if (cont==1) {
+            Log.d("area" + cont, String.valueOf(areatotal));
+            Area1=areatotal;
+        }
+        if (cont==2) {
+            Log.d("area" + cont, String.valueOf(areatotal));
+            Area2=areatotal;
+        }
+        if (cont==3) {
+            Log.d("area" + cont, String.valueOf(areatotal));
+            Area3=areatotal;
+        }
+        cont = cont + 1;
         return tempp;
     }
 }
