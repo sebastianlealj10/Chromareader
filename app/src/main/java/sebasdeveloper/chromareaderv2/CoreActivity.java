@@ -37,8 +37,6 @@ import butterknife.OnClick;
 public class CoreActivity extends AppCompatActivity {
     //Clase para inicializar la libreria opencv
     private static final String TAG = "MainActivity";
-
-
     static {
         if (!OpenCVLoader.initDebug()) {
             Log.d(TAG, "OpenCV not loaded");
@@ -47,8 +45,6 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
     Uri imageUri;
-    Intent i;
-    Intent intent;
     Bitmap bmp;
     Bitmap bmp2;
     Mat ima;
@@ -62,13 +58,13 @@ public class CoreActivity extends AppCompatActivity {
     public final static String Lugar= "lugar";
     public final static String Descripcion= "descripcion";
     PermissionManager permissionManager;
-
     @Override
     //Clase donde se crea el layout y se inicializa la libreria ButterKnife
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_core);
         ButterKnife.bind(this);
+        //llamado a la biblioteca de permisos
         permissionManager = new PermissionManager(this);
         permissionManager.addPermission(Manifest.permission.CAMERA);
         permissionManager.addPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -80,7 +76,7 @@ public class CoreActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
+//metodo sobreescrito para la libreria de permisos
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -88,7 +84,7 @@ public class CoreActivity extends AppCompatActivity {
             tomaFoto();
         }
     }
-
+//antes de llamar las funciones de carga o captura de imagenes se piden los permisos
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -111,7 +107,6 @@ public class CoreActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
     void tomaFoto() {
         //Creamos el Intent para llamar a la Camara
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -166,7 +161,6 @@ public class CoreActivity extends AppCompatActivity {
 
         }
     }
-
     // Boton donde se lanza la nueva actividad
     @OnClick(R.id.button2)
     public void processingphoto(View view) {

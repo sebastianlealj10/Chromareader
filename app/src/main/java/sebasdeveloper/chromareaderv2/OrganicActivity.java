@@ -53,6 +53,7 @@ public class OrganicActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         procesarcroma();
         double a=0;
+        //se reciben las areas hayadas en la otra actividad
         Intent intent = getIntent();
         Areatotal1 = intent.getStringExtra(PreprocessingActivity.Areas1).toString();
         Areatotal2 = intent.getStringExtra(PreprocessingActivity.Areas2).toString();
@@ -71,6 +72,7 @@ public class OrganicActivity extends AppCompatActivity {
                 "/sebas/"+nombre);
         return imagen;
     }
+    //se muestra cada capa
     public void showima(String a){
         if (a=="capa1") {
             String nombre = a + ".jpg";
@@ -91,18 +93,13 @@ public class OrganicActivity extends AppCompatActivity {
                     "/sebas/" + nombre);
             img3.setImageBitmap(bmp);
         }
-        if (a=="prueb") {
-            String nombre = a + ".jpg";
-            bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() +
-                    "/sebas/" + nombre);
-            img1.setImageBitmap(bmp);
-        }
     }
     public void imwrite_mat(Mat imagen,String a){
         String nombre=a+".jpg";
         Imgcodecs.imwrite(Environment.getExternalStorageDirectory()+
                 "/sebas/"+nombre,imagen);
     }
+    //listener de los imagebutton
     @OnClick(R.id.imageButton1)
     public void datoscapa1(View view) {
         textarea1.setText(Areatotal1);
