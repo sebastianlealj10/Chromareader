@@ -9,8 +9,8 @@
     tools:layout_editor_absoluteX="0dp">
 
     <LinearLayout
-        android:layout_width="180dp"
-        android:layout_height="0dp"
+        android:layout_width="380dp"
+        android:layout_height="258dp"
         android:orientation="vertical"
         android:weightSum="1"
         android:id="@+id/linearLayout"
@@ -38,12 +38,24 @@
                 android:text="Capa 1" />
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/imageButton4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@android:color/background_light"
-            android:layout_weight="0.33" />
+        <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="54dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <ImageButton
+                android:id="@+id/imageButton4"
+                android:layout_width="210dp"
+                android:layout_height="match_parent"
+                app:srcCompat="@android:color/background_light" />
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="TextView" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,31 +69,56 @@
                 android:text="Capa 2" />
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/imageButton5"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.34"
-            app:srcCompat="@android:color/background_light" />
+            android:layout_height="52dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/imageButton5"
+                android:layout_width="211dp"
+                android:layout_height="51dp"
+                app:srcCompat="@android:color/background_light" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="TextView" />
+        </LinearLayout>
 
         <LinearLayout
-            android:layout_width="190dp"
-            android:layout_height="21dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="379dp"
+                android:layout_height="match_parent"
                 android:text="Capa 3" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <ImageButton
+                    android:id="@+id/imageButton6"
+                    android:layout_width="210dp"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@android:color/background_light" />
+
+                <TextView
+                    android:id="@+id/textView17"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="TextView" />
+
+            </LinearLayout>
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/imageButton6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.36"
-            app:srcCompat="@android:color/background_light" />
     </LinearLayout>
 
     <LinearLayout
