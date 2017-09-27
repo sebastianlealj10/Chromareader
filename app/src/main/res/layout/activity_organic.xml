@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="sebasdeveloper.chromareaderv2.OrganicActivity">
-
     <TextView
         android:id="@+id/textView1"
         android:layout_width="0dp"
@@ -220,5 +219,4 @@
 
         </LinearLayout>
     </LinearLayout>
-
 </android.support.constraint.ConstraintLayout>

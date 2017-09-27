@@ -55,8 +55,10 @@ public class PreprocessingActivity extends AppCompatActivity {
     Double Area2=0.0;
     Double Area3=0.0;
     //Bindeo para el imageview
-    @BindView(R.id.image2) ImageView img2;
-    @BindView(R.id.textView) TextView txt;
+    @BindView(R.id.imageButton1) ImageView imgb2;
+    @BindView(R.id.textView3) TextView txt3;
+    @BindView(R.id.textView5) TextView txt5;
+    @BindView(R.id.textView7) TextView txt7;
     Bitmap bmp;
     Mat ima;
     Mat imasinfondo;
@@ -76,7 +78,10 @@ public class PreprocessingActivity extends AppCompatActivity {
         String nombre = intent.getStringExtra(CoreActivity.Nombre);
         String lugar = intent.getStringExtra(CoreActivity.Lugar);
         String descripcion = intent.getStringExtra(CoreActivity.Descripcion);
-        txt.setText("Nombre:"+nombre+"\n"+"Lugar:"+lugar+"\n"+"Descripción:"+descripcion);
+        //txt2.setText("Nombre:"+nombre+"\n"+"Lugar:"+lugar+"\n"+"Descripción:"+descripcion);
+        txt3.setText(nombre);
+        txt5.setText(lugar);
+        txt7.setText(descripcion);
         //Funcion encargada de procesar la imagen
         procesarcroma();
     }
@@ -241,7 +246,7 @@ public class PreprocessingActivity extends AppCompatActivity {
         String nombre=a+".jpg";
         bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()+
                 "/sebas/"+nombre);
-        img2.setImageBitmap(bmp);
+        imgb2.setImageBitmap(bmp);
     }
     //se usa la funcion split para obtener la componente necesaria en la segmentancion
     public Mat componente(int c){
