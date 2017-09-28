@@ -14,7 +14,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -55,10 +58,11 @@ public class PreprocessingActivity extends AppCompatActivity {
     Double Area2=0.0;
     Double Area3=0.0;
     //Bindeo para el imageview
-    @BindView(R.id.imageButton1) ImageView imgb2;
+    @BindView(R.id.imageButton1) ImageButton imgb1;
     @BindView(R.id.textView3) TextView txt3;
     @BindView(R.id.textView5) TextView txt5;
     @BindView(R.id.textView7) TextView txt7;
+    @BindView(R.id.linearLayout) LinearLayout layout;
     Bitmap bmp;
     Mat ima;
     Mat imasinfondo;
@@ -246,7 +250,7 @@ public class PreprocessingActivity extends AppCompatActivity {
         String nombre=a+".jpg";
         bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()+
                 "/sebas/"+nombre);
-        imgb2.setImageBitmap(bmp);
+        imgb1.setImageBitmap(bmp);
     }
     //se usa la funcion split para obtener la componente necesaria en la segmentancion
     public Mat componente(int c){
@@ -296,4 +300,10 @@ public class PreprocessingActivity extends AppCompatActivity {
         cont = cont + 1;
         return tempp;
     }
+    @OnClick(R.id.imageButton1)
+    public void colorcroma(View view) {
+        layout.setVisibility(View.VISIBLE);
+
+    }
+
 }
