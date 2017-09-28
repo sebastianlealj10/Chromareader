@@ -3,6 +3,7 @@ package sebasdeveloper.chromareaderv2;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -59,6 +60,9 @@ public class PreprocessingActivity extends AppCompatActivity {
     Double Area3=0.0;
     //Bindeo para el imageview
     @BindView(R.id.imageButton1) ImageButton imgb1;
+    @BindView(R.id.imageButton4) ImageButton imgb2;
+    @BindView(R.id.imageButton2) ImageButton imgb3;
+    @BindView(R.id.imageButton3) ImageButton imgb4;
     @BindView(R.id.textView3) TextView txt3;
     @BindView(R.id.textView5) TextView txt5;
     @BindView(R.id.textView7) TextView txt7;
@@ -117,7 +121,6 @@ public class PreprocessingActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
     public void procesarcroma() {
         //Lectura del croma orignal
         ima=imread_mat("cromaoriginal");
@@ -197,7 +200,6 @@ public class PreprocessingActivity extends AppCompatActivity {
                 }
             }
         }
-
         return temp;
     }
     //funcion que segmenta la capa2
@@ -211,7 +213,6 @@ public class PreprocessingActivity extends AppCompatActivity {
         temp=fillholes(temp,80000);
         return temp;
     }
-
     public Mat segcapa1(Mat temp)
     {
         //para segmentar esta capa se elimina lo sobrante de la capa2
@@ -282,7 +283,7 @@ public class PreprocessingActivity extends AppCompatActivity {
             //se haya el area total de cada capa
             else
                areatotal=areatotal+area2;
-            Log.d("area", String.valueOf(areatotal));
+            Log.d("area"+cont, String.valueOf(areatotal));
 
         }
         if (cont==1) {
@@ -303,7 +304,66 @@ public class PreprocessingActivity extends AppCompatActivity {
     @OnClick(R.id.imageButton1)
     public void colorcroma(View view) {
         layout.setVisibility(View.VISIBLE);
-
+        double capa1b=0.0;
+        double capa1g=0.0;
+        double capa1r=0.0;
+        double capa2b=0.0;
+        double capa2g=0.0;
+        double capa2r=0.0;
+        double capa3b=0.0;
+        double capa3g=0.0;
+        double capa3r=0.0;
+        double numcapa1=0.0;
+        double numcapa2=0.0;
+        double numcapa3=0.0;
+        int rows=imasinfondo.rows();
+        int cols=imasinfondo.cols();
+        int ch = imasinfondo.channels();
+        double[] datocolor={0,0,0};
+            for (int i=0; i<rows; i++)
+            {
+                for (int j=0; j<cols; j++)
+                {
+                    double[] pixcapa1 = capa1.get(i, j);
+                    if (pixcapa1[0]> 0 ) {
+                        double[] rgbcapa1 = imasinfondo.get(i, j);
+                        capa1b=rgbcapa1[0]+capa1b;
+                        capa1g=rgbcapa1[1]+capa1g;
+                        capa1r=rgbcapa1[2]+capa1r;
+                        numcapa1=numcapa1+1;
+                    }
+                    double[] pixcapa2 = capa2.get(i, j);
+                    if (pixcapa2[0]> 0 ) {
+                        double[] rgbcapa2 = imasinfondo.get(i, j);
+                        capa2b=rgbcapa2[0]+capa2b;
+                        capa2g=rgbcapa2[1]+capa2g;
+                        capa2r=rgbcapa2[2]+capa2r;
+                        numcapa2=numcapa2+1;
+                    }
+                    double[] pixcapa3 = capa3.get(i, j);
+                    if (pixcapa3[0]> 0 ) {
+                        double[] rgbcapa3 = imasinfondo.get(i, j);
+                        capa3b=rgbcapa3[0]+capa3b;
+                        capa3g=rgbcapa3[1]+capa3g;
+                        capa3r=rgbcapa3[2]+capa3r;
+                        numcapa3=numcapa3+1;
+                    }
+                }
+            }
+        int b1= (int) (capa1b/numcapa1);
+        int g1= (int) (capa1g/numcapa1);
+        int r1= (int) (capa1r/numcapa1);
+        Log.d("rgb", String.valueOf(r1+" "+g1+" "+b1));
+        imgb2.setColorFilter(Color.rgb(r1,g1,b1));
+        int b2= (int) (capa2b/numcapa2);
+        int g2= (int) (capa2g/numcapa2);
+        int r2= (int) (capa2r/numcapa2);
+        Log.d("rgb", String.valueOf(r2+" "+g2+" "+b2));
+        imgb3.setColorFilter(Color.rgb(r2,g2,b2));
+        int b3= (int) (capa3b/numcapa3);
+        int g3= (int) (capa3g/numcapa3);
+        int r3= (int) (capa3r/numcapa3);
+        Log.d("rgb", String.valueOf(r3+" "+g3+" "+b3));
+        imgb4.setColorFilter(Color.rgb(r3,g3,b3));
     }
-
 }
