@@ -9,6 +9,9 @@
         android:id="@+id/textView1"
         android:layout_width="0dp"
         android:layout_height="41dp"
+        android:background="@color/colorPrimaryDark2"
+        android:textSize="17dp"
+        android:textColor="@color/cardview_light_background"
         android:text="Areas y compacidad de cada capa en la cromatografía"
         tools:layout_constraintTop_creator="1"
         android:textAlignment="center"
@@ -60,8 +63,10 @@
                     android:id="@+id/textView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:text="Medidas capa oxigenación" />
+                    android:background="@color/colorPrimary2"
+                    android:textColor="@color/cardview_light_background"
+                    android:text="Medidas capa oxigenación"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/textView3"
@@ -72,6 +77,8 @@
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="match_parent"
+                    android:background="@color/colorAccent2"
+                    android:textColor="@color/cardview_light_background"
                     android:layout_height="wrap_content"
                     android:text="Area" />
 
@@ -84,6 +91,8 @@
                 <TextView
                     android:id="@+id/textView6"
                     android:layout_width="match_parent"
+                    android:background="@color/colorAccent2"
+                    android:textColor="@color/cardview_light_background"
                     android:layout_height="wrap_content"
                     android:text="Compacidad" />
 
@@ -121,6 +130,8 @@
                 <TextView
                     android:id="@+id/textView8"
                     android:layout_width="match_parent"
+                    android:background="@color/colorPrimary2"
+                    android:textColor="@color/cardview_light_background"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:text="Medidas capa organica" />
@@ -134,6 +145,8 @@
                 <TextView
                     android:id="@+id/textView10"
                     android:layout_width="match_parent"
+                    android:background="@color/colorAccent2"
+                    android:textColor="@color/cardview_light_background"
                     android:layout_height="wrap_content"
                     android:text="Area" />
 
@@ -146,6 +159,8 @@
                 <TextView
                     android:id="@+id/textView12"
                     android:layout_width="match_parent"
+                    android:background="@color/colorAccent2"
+                    android:textColor="@color/cardview_light_background"
                     android:layout_height="wrap_content"
                     android:text="Compacidad" />
 
@@ -182,6 +197,8 @@
                 <TextView
                     android:id="@+id/textView19"
                     android:layout_width="match_parent"
+                    android:background="@color/colorPrimary2"
+                    android:textColor="@color/cardview_light_background"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:text="Medidas capa inorganica" />
@@ -195,6 +212,8 @@
                 <TextView
                     android:id="@+id/textView21"
                     android:layout_width="match_parent"
+                    android:background="@color/colorAccent2"
+                    android:textColor="@color/cardview_light_background"
                     android:layout_height="wrap_content"
                     android:text="Area" />
 
@@ -206,6 +225,8 @@
 
                 <TextView
                     android:id="@+id/textView23"
+                    android:background="@color/colorAccent2"
+                    android:textColor="@color/cardview_light_background"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Compacidad" />

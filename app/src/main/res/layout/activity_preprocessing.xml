@@ -45,7 +45,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary"
+                android:textColor="@color/cardview_light_background"
+                android:background="@color/colorPrimary2"
                 android:text="Nombre" />
 
             <TextView
@@ -58,7 +59,8 @@
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorPrimary2"
+                android:textColor="@color/cardview_light_background"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Lugar" />
@@ -73,8 +75,9 @@
             <TextView
                 android:id="@+id/textView6"
                 android:layout_width="match_parent"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorPrimary2"
                 android:layout_height="wrap_content"
+                android:textColor="@color/cardview_light_background"
                 android:layout_weight="1"
                 android:text="Descripción" />
 
@@ -110,7 +113,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="28dp"
-            android:background="@color/colorAccent"
+            android:background="@color/colorPrimary2"
             android:orientation="vertical">
 
             <TextView
@@ -118,7 +121,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="28dp"
                 android:gravity="center"
-                android:textColorLink="@color/colorPrimary"
+                android:textColorLink="@color/colorPrimary2"
+                android:textColor="@color/cardview_light_background"
                 android:text="Capa 1" />
         </LinearLayout>
 
@@ -143,7 +147,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:background="@color/colorAccent"
+            android:background="@color/colorPrimary2"
             android:layout_height="28dp"
             android:orientation="vertical">
 
@@ -151,6 +155,8 @@
                 android:id="@+id/textView10"
                 android:layout_width="match_parent"
                 android:layout_height="28dp"
+                android:textColorLink="@color/colorPrimary2"
+                android:textColor="@color/cardview_light_background"
                 android:gravity="center"
                 android:text="Capa 2" />
         </LinearLayout>
@@ -176,12 +182,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
+            android:background="@color/colorPrimary2"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView12"
                 android:layout_width="match_parent"
+                android:textColorLink="@color/colorPrimary2"
+                android:textColor="@color/cardview_light_background"
                 android:layout_height="28dp"
                 android:gravity="center"
                 android:text="Capa 3" />
@@ -235,6 +243,9 @@
             android:id="@+id/textView1"
             android:layout_width="383dp"
             android:layout_height="32dp"
+            android:textSize="17dp"
+            android:background="@color/colorPrimaryDark2"
+            android:textColor="@color/cardview_light_background"
             android:gravity="center"
             android:text="Cromatografia e información" />
 
