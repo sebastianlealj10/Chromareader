@@ -34,6 +34,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static java.lang.Math.abs;
+
 public class CoreActivity extends AppCompatActivity {
     //Clase para inicializar la libreria opencv
     private static final String TAG = "MainActivity";
@@ -133,6 +135,8 @@ public class CoreActivity extends AppCompatActivity {
             //no rotar si es en movil
             ima = rotateima(ima);
             //
+            //funcion para eliminar el fondo
+            deletebackground();
             imwrite_mat(ima);
             showima();
             btn2.setEnabled(true);
@@ -187,17 +191,36 @@ public class CoreActivity extends AppCompatActivity {
 
     public void imwrite_mat(Mat imagen) {
         Imgcodecs.imwrite(Environment.getExternalStorageDirectory() +
-                "/sebas/" + "foto1.jpg", imagen);
+                "/sebas/" + "cromasinfondo.jpg", imagen);
     }
 
     public void showima() {
         bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() +
-                "/sebas/" + "foto1.jpg");
+                "/sebas/" + "cromasinfondo.jpg");
         img.setImageBitmap(bmp);
     }
 
     public Mat rotateima(Mat imagen) {
         Core.transpose(imagen, imagen);
         return imagen;
+    }
+    //funcion encargada de eliminar el borde blanco del papel en el croma
+    public void deletebackground(){
+        int rows=ima.rows();
+        int cols=ima.cols();
+        int ch = ima.channels();
+        double[] datocolor={0,0,0};
+        {
+            for (int i=0; i<rows; i++)
+            {
+                for (int j=0; j<cols; j++)
+                {
+                    double[] pix = ima.get(i, j);
+                    //el ruido de la imagen corresponde a pixeles muy cercanos entre ellos mismos
+                    if (abs(pix[0] -  pix[1])  < 10 ) {
+                        ima.put(i, j, datocolor);}
+                }
+            }
+        }
     }
 }

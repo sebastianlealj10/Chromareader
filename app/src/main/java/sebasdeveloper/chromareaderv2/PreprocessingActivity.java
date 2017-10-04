@@ -123,14 +123,12 @@ public class PreprocessingActivity extends AppCompatActivity {
     }
     public void procesarcroma() {
         //Lectura del croma orignal
-        ima=imread_mat("cromaoriginal");
+        imasinfondo=imread_mat("cromasinfondo");
         //Umbrales para al segmentacion de cada capa
         int threshb1=45;
         int threshb2=95;
         int threshr1=160;
         int threshr2=110;
-        //funcion para eliminar el fondo
-        imasinfondo=deletebackground();
         //Inicializacion de cada Mat donde se cargara cada capa
         capa1=Mat.zeros(imasinfondo.size(),0);
         capa2=Mat.zeros(imasinfondo.size(),0);
@@ -181,27 +179,7 @@ public class PreprocessingActivity extends AppCompatActivity {
         //se muestra el croma en la actividad
         showima("cromasinfondo");
     }
-    //funcion encargada de eliminar el borde blanco del papel en el croma
-    public Mat deletebackground(){;
-        Mat temp = ima;
-        int rows=ima.rows();
-        int cols=ima.cols();
-        int ch = ima.channels();
-        double[] datocolor={0,0,0};
-        {
-            for (int i=0; i<rows; i++)
-            {
-                for (int j=0; j<cols; j++)
-                {
-                    double[] pix = ima.get(i, j);
-                    //el ruido de la imagen corresponde a pixeles muy cercanos entre ellos mismos
-                    if (abs(pix[0] -  pix[1])  < 10 ) {
-                        temp.put(i, j, datocolor);}
-                }
-            }
-        }
-        return temp;
-    }
+
     //funcion que segmenta la capa2
     public Mat segcapa2(Mat temp)
     {
@@ -257,14 +235,14 @@ public class PreprocessingActivity extends AppCompatActivity {
     public Mat componente(int c){
         Mat imagen=ima;
         List<Mat> canales = new ArrayList<Mat>();
-        imagen.zeros(ima.size(),ima.type());
+        imagen.zeros(imasinfondo.size(),imasinfondo.type());
         Core.split(imasinfondo,canales);
         imagen=canales.get(c);
         return imagen;
     }
     //esta funcion es la encargada de dejar solo el area mayor de la capa y eiminar los sobrantes
     public Mat fillholes(Mat tempp,int areas){
-        tempp.zeros(ima.size(),ima.type());
+        tempp.zeros(imasinfondo.size(),imasinfondo.type());
         double areatotal=0;
         Point a= new Point(0,0);
         Mat hierarchy = new Mat();
@@ -320,9 +298,9 @@ public class PreprocessingActivity extends AppCompatActivity {
         int cols=imasinfondo.cols();
         int ch = imasinfondo.channels();
         double[] datocolor={0,0,0};
-            for (int i=0; i<rows; i++)
+            for (int i=0; i<rows; i+=2)
             {
-                for (int j=0; j<cols; j++)
+                for (int j=0; j<cols; j+=2)
                 {
                     double[] pixcapa1 = capa1.get(i, j);
                     if (pixcapa1[0]> 0 ) {
