@@ -5,12 +5,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
+import android.graphics.PixelFormat;
+import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Size;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -30,6 +34,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -137,7 +142,6 @@ public class CoreActivity extends AppCompatActivity {
             ima = imread_mat();
             //no rotar si es en movil
             ima = rotateima(ima);
-            //
             //funcion para eliminar el fondo
             deletebackground();
             imwrite_mat(ima);
@@ -163,9 +167,13 @@ public class CoreActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            img.setImageBitmap(bmp2);
+            //funciones del opencv
+            ima = imread_mat();
+            //funcion para eliminar el fondo
+            deletebackground();
+            imwrite_mat(ima);
+            showima();
             btn2.setEnabled(true);
-
         }
     }
     // Boton donde se lanza la nueva actividad
@@ -188,7 +196,7 @@ public class CoreActivity extends AppCompatActivity {
         Mat imagen;
         //Se lee la foto desde la ubicacion donde fue almacenada en la memoria interna
         imagen = Imgcodecs.imread(Environment.getExternalStorageDirectory() +
-                "/sebas/" + "foto1.jpg");
+                "/sebas/" + "cromaoriginal.jpg");
         return imagen;
     }
 

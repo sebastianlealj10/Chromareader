@@ -133,8 +133,6 @@ public class PreprocessingActivity extends AppCompatActivity {
         capa1=Mat.zeros(imasinfondo.size(),0);
         capa2=Mat.zeros(imasinfondo.size(),0);
         capa3=Mat.zeros(imasinfondo.size(),0);
-        //Escritura de la imagen sin fondo
-        imwrite_mat(imasinfondo,"cromasinfondo");
         //datos de filas y columnas del croma sin fondo
         int rows=imasinfondo.rows();
         int cols=imasinfondo.cols();
