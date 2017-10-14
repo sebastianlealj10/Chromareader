@@ -262,5 +262,13 @@
 
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="40dp"
+        tools:layout_editor_absoluteY="574dp" />
+
 </android.support.constraint.ConstraintLayout>
 

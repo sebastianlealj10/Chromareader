@@ -60,6 +60,7 @@ public class CoreActivity extends AppCompatActivity {
     public final static String Nombre = "nombre";
     public final static String Lugar= "lugar";
     public final static String Descripcion= "descripcion";
+    public final static String Fecha= "10";
     PermissionManager permissionManager;
     @Override
     //Clase donde se crea el layout y se inicializa la libreria ButterKnife
@@ -179,8 +180,12 @@ public class CoreActivity extends AppCompatActivity {
         String lugar = editText2.getText().toString();
         intent.putExtra(Lugar, lugar);
         EditText editText3 = (EditText) findViewById(R.id.editText3);
+        String fecha = editText3.getText().toString();
+        intent.putExtra(Fecha, fecha);
+        startActivity(intent);
+        EditText editText4 = (EditText) findViewById(R.id.editText3);
         String descripcion = editText3.getText().toString();
-        intent.putExtra(Descripcion, descripcion);
+        intent.putExtra(descripcion, Descripcion);
         startActivity(intent);
     }
 
