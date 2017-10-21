@@ -61,6 +61,7 @@ public class CoreActivity extends AppCompatActivity {
     public final static String Lugar= "lugar";
     public final static String Descripcion= "descripcion";
     public final static String Fecha= "10";
+    Mat temp;
     PermissionManager permissionManager;
     @Override
     //Clase donde se crea el layout y se inicializa la libreria ButterKnife
@@ -138,6 +139,7 @@ public class CoreActivity extends AppCompatActivity {
             ima = imread_mat();
             //no rotar si es en movil
             ima = rotateima(ima);
+            Log.d("tamañop" , String.valueOf(ima.size()));
             //
             //funcion para eliminar el fondo
             deletebackground();
@@ -159,14 +161,21 @@ public class CoreActivity extends AppCompatActivity {
                 FileOutputStream out = new FileOutputStream(Environment.getExternalStorageDirectory() +
                         "/sebas/" + "cromaoriginal.jpg");
                 bmp2.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                Log.d("entro" , "aqui");
                 out.flush();
                 out.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            img.setImageBitmap(bmp2);
+            ima = imread_mat();
+            //no rotar si es en movil
+            Log.d("tamañop" , String.valueOf(ima.size()));
+            //
+            //funcion para eliminar el fondo
+            deletebackground();
+            imwrite_mat(ima);
+            showima();
             btn2.setEnabled(true);
-
         }
     }
     // Boton donde se lanza la nueva actividad
@@ -193,7 +202,7 @@ public class CoreActivity extends AppCompatActivity {
         Mat imagen;
         //Se lee la foto desde la ubicacion donde fue almacenada en la memoria interna
         imagen = Imgcodecs.imread(Environment.getExternalStorageDirectory() +
-                "/sebas/" + "foto1.jpg");
+                "/sebas/" + "cromaoriginal.jpg");
         return imagen;
     }
 

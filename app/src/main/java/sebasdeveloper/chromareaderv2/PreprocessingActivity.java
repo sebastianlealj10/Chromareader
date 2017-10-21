@@ -67,6 +67,7 @@ public class PreprocessingActivity extends AppCompatActivity {
     @BindView(R.id.textView5) TextView txt5;
     @BindView(R.id.textView7) TextView txt7;
     @BindView(R.id.linearLayout) LinearLayout layout;
+    @BindView(R.id.progressBar1) LinearLayout prb1;
     Bitmap bmp;
     Mat ima;
     Mat imasinfondo;
@@ -90,6 +91,8 @@ public class PreprocessingActivity extends AppCompatActivity {
         txt3.setText(nombre);
         txt5.setText(lugar);
         txt7.setText(descripcion);
+        imasinfondo=imread_mat("cromasinfondo");
+        showima("cromasinfondo");
         //Funcion encargada de procesar la imagen
         procesarcroma();
     }
@@ -123,7 +126,8 @@ public class PreprocessingActivity extends AppCompatActivity {
     }
     public void procesarcroma() {
         //Lectura del croma orignal
-        imasinfondo=imread_mat("cromasinfondo");
+
+        Log.d("tamaño", String.valueOf(imasinfondo.size()));
         //Umbrales para al segmentacion de cada capa
         int threshb1=45;
         int threshb2=95;
@@ -177,7 +181,7 @@ public class PreprocessingActivity extends AppCompatActivity {
         capa1=segcapa1(capa1);
         imwrite_mat(capa1,"capa1");
         //se muestra el croma en la actividad
-        showima("cromasinfondo");
+
     }
 
     //funcion que segmenta la capa2
@@ -236,6 +240,7 @@ public class PreprocessingActivity extends AppCompatActivity {
         Mat imagen=ima;
         List<Mat> canales = new ArrayList<Mat>();
         imagen.zeros(imasinfondo.size(),imasinfondo.type());
+        Log.d("tamaño" + cont, String.valueOf(imasinfondo.size()));
         Core.split(imasinfondo,canales);
         imagen=canales.get(c);
         return imagen;
