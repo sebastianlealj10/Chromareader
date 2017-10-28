@@ -67,7 +67,6 @@ public class PreprocessingActivity extends AppCompatActivity {
     @BindView(R.id.textView5) TextView txt5;
     @BindView(R.id.textView7) TextView txt7;
     @BindView(R.id.linearLayout) LinearLayout layout;
-    @BindView(R.id.progressBar1) LinearLayout prb1;
     Bitmap bmp;
     Mat ima;
     Mat imasinfondo;
