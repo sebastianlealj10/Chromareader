@@ -259,4 +259,26 @@ public class CoreActivity extends AppCompatActivity {
         rt= (int) (cromar/numcapa1);
         Log.d("rgb", String.valueOf(rt+" "+gt+" "+bt));
     }
+
+    public Mat areadelcroma(){
+        int rows=ima.rows();
+        int cols=ima.cols();
+        int ch = ima.channels();
+        Mat temp=null;
+        temp.zeros(rows,cols,0);
+        {
+            for (int i=0; i<rows; i++)
+            {
+                for (int j=0; j<cols; j++)
+                {
+                    double[] pix = ima.get(i, j);
+                    //el ruido de la imagen corresponde a pixeles muy cercanos entre ellos mismos
+                    if (pix[0]>100) {
+                        temp.put(i, j, 255);}
+                }
+            }
+        }
+        return temp;
+    }
+
 }

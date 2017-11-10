@@ -66,7 +66,7 @@ public class OrganicActivity extends AppCompatActivity {
         temp=componente(2);
         areacroma();
         imwrite_mat(temp,"areacroma");
-        showima("areacroma");
+        showima("capa1");
         showima("capa2");
         showima("capa3");
     }
@@ -80,7 +80,7 @@ public class OrganicActivity extends AppCompatActivity {
     }
     //se muestra cada capa
     public void showima(String a){
-        if (a=="areacroma") {
+        if (a=="capa1") {
             String nombre = a + ".jpg";
             bmp = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() +
                     "/sebas/" + nombre);
