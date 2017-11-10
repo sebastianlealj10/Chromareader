@@ -128,6 +128,7 @@ public class PreprocessingActivity extends AppCompatActivity {
 
         Log.d("tamaño", String.valueOf(imasinfondo.size()));
         //Umbrales para al segmentacion de cada capa
+
         int threshb1=45;
         int threshb2=95;
         int threshr1=160;
@@ -346,4 +347,9 @@ public class PreprocessingActivity extends AppCompatActivity {
         Log.d("rgb", String.valueOf(r3+" "+g3+" "+b3));
         imgb4.setColorFilter(Color.rgb(r3,g3,b3));
     }
+   // public int definirumbrales(){
+
+
+
+   // }
 }

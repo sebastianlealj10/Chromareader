@@ -65,6 +65,12 @@ public class CoreActivity extends AppCompatActivity {
     public final static String Nombre = "nombre";
     public final static String Lugar= "lugar";
     public final static String Descripcion= "descripcion";
+    public final static String blue="azul";
+    public final static String green="verde";
+    public final static String red="red";
+    int bt;
+    int gt;
+    int rt;
     PermissionManager permissionManager;
     @Override
     //Clase donde se crea el layout y se inicializa la libreria ButterKnife
@@ -183,12 +189,15 @@ public class CoreActivity extends AppCompatActivity {
         EditText editText1 = (EditText) findViewById(R.id.editText1);
         String nombre = editText1.getText().toString();
         intent.putExtra(Nombre, nombre);
+        intent.putExtra(blue,bt);
         EditText editText2 = (EditText) findViewById(R.id.editText2);
         String lugar = editText2.getText().toString();
         intent.putExtra(Lugar, lugar);
+        intent.putExtra(green,gt);
         EditText editText3 = (EditText) findViewById(R.id.editText3);
         String descripcion = editText3.getText().toString();
         intent.putExtra(Descripcion, descripcion);
+        intent.putExtra(red,rt);
         startActivity(intent);
     }
 
@@ -219,6 +228,10 @@ public class CoreActivity extends AppCompatActivity {
     public void deletebackground(){
         int rows=ima.rows();
         int cols=ima.cols();
+        double cromab=0.0;
+        double cromag=0.0;
+        double cromar=0.0;
+        double numcapa1=0.0;
         int ch = ima.channels();
         double[] datocolor={0,0,0};
         {
@@ -229,9 +242,21 @@ public class CoreActivity extends AppCompatActivity {
                     double[] pix = ima.get(i, j);
                     //el ruido de la imagen corresponde a pixeles muy cercanos entre ellos mismos
                     if (abs(pix[0] -  pix[1])  < 10 ) {
-                        ima.put(i, j, datocolor);}
+                        ima.put(i, j, datocolor);
+
+                    }
+                    else{
+                        cromab=pix[0]+cromab;
+                        cromag=pix[1]+cromag;
+                        cromar=pix[2]+cromar;
+                        numcapa1=numcapa1+1;
+                    }
                 }
             }
         }
+        bt= (int) (cromab/numcapa1);
+        gt= (int) (cromag/numcapa1);
+        rt= (int) (cromar/numcapa1);
+        Log.d("rgb", String.valueOf(rt+" "+gt+" "+bt));
     }
 }
