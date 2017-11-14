@@ -65,12 +65,12 @@ public class CoreActivity extends AppCompatActivity {
     public final static String Nombre = "nombre";
     public final static String Lugar= "lugar";
     public final static String Descripcion= "descripcion";
-    public final static String blue="azul";
-    public final static String green="verde";
-    public final static String red="red";
-    int bt;
-    int gt;
-    int rt;
+    public static String blue="azul";
+    public static String green="verde";
+    public static String red="rojo";
+    double bt=0.0;
+    double gt=0.0;
+    double rt=0.0;
     PermissionManager permissionManager;
     @Override
     //Clase donde se crea el layout y se inicializa la libreria ButterKnife
@@ -189,16 +189,17 @@ public class CoreActivity extends AppCompatActivity {
         EditText editText1 = (EditText) findViewById(R.id.editText1);
         String nombre = editText1.getText().toString();
         intent.putExtra(Nombre, nombre);
-        intent.putExtra(blue,bt);
         EditText editText2 = (EditText) findViewById(R.id.editText2);
         String lugar = editText2.getText().toString();
         intent.putExtra(Lugar, lugar);
-        intent.putExtra(green,gt);
         EditText editText3 = (EditText) findViewById(R.id.editText3);
         String descripcion = editText3.getText().toString();
         intent.putExtra(Descripcion, descripcion);
-        intent.putExtra(red,rt);
+        intent.putExtra(red, rt);
+        intent.putExtra(green,gt);
+        intent.putExtra(blue,bt);
         startActivity(intent);
+
     }
 
     public Mat imread_mat() {
@@ -232,7 +233,6 @@ public class CoreActivity extends AppCompatActivity {
         double cromag=0.0;
         double cromar=0.0;
         double numcapa1=0.0;
-        int ch = ima.channels();
         double[] datocolor={0,0,0};
         {
             for (int i=0; i<rows; i++)
@@ -241,9 +241,8 @@ public class CoreActivity extends AppCompatActivity {
                 {
                     double[] pix = ima.get(i, j);
                     //el ruido de la imagen corresponde a pixeles muy cercanos entre ellos mismos
-                    if (abs(pix[0] -  pix[1])  < 10 ) {
+                    if (abs(pix[1] -  pix[0])  < 10 || pix[1]>160 ) {
                         ima.put(i, j, datocolor);
-
                     }
                     else{
                         cromab=pix[0]+cromab;
@@ -257,28 +256,7 @@ public class CoreActivity extends AppCompatActivity {
         bt= (int) (cromab/numcapa1);
         gt= (int) (cromag/numcapa1);
         rt= (int) (cromar/numcapa1);
-        Log.d("rgb", String.valueOf(rt+" "+gt+" "+bt));
-    }
-
-    public Mat areadelcroma(){
-        int rows=ima.rows();
-        int cols=ima.cols();
-        int ch = ima.channels();
-        Mat temp=null;
-        temp.zeros(rows,cols,0);
-        {
-            for (int i=0; i<rows; i++)
-            {
-                for (int j=0; j<cols; j++)
-                {
-                    double[] pix = ima.get(i, j);
-                    //el ruido de la imagen corresponde a pixeles muy cercanos entre ellos mismos
-                    if (pix[0]>100) {
-                        temp.put(i, j, 255);}
-                }
-            }
-        }
-        return temp;
+        Log.d("rgb", String.valueOf(rt+" "+gt+" "+bt+" "+numcapa1+" "+rows+" "+cols));
     }
 
 }

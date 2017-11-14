@@ -4,20 +4,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.annotation.Size;
-import android.support.annotation.StringDef;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,30 +19,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import org.opencv.android.Utils;
 import org.opencv.core.Core;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfInt;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.imgproc.Moments;
 
-import java.io.File;
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.random;
-import static org.opencv.core.Core.CMP_GT;
-import static org.opencv.core.Core.FILLED;
-import static org.opencv.core.CvType.CV_16S;
-import static org.opencv.core.CvType.CV_32S;
-import static org.opencv.core.CvType.CV_64F;
+import static sebasdeveloper.chromareaderv2.CoreActivity.blue;
+import static sebasdeveloper.chromareaderv2.CoreActivity.green;
+import static sebasdeveloper.chromareaderv2.CoreActivity.red;
 
 public class PreprocessingActivity extends AppCompatActivity {
     Intent intent;
@@ -58,6 +43,15 @@ public class PreprocessingActivity extends AppCompatActivity {
     Double Area1=0.0;
     Double Area2=0.0;
     Double Area3=0.0;
+    Double Rtotal=0.0;
+    Double Gtotal=0.0;
+    Double Btotal=0.0;
+    int componentecapa1=0;
+    int componentecapa2=0;
+    int componentecapa1_1D=0;
+    int componentecapa1_1U=0;
+    int componentecapa2_1D=0;
+    int componentecapa2_1U=0;
     //Bindeo para el imageview
     @BindView(R.id.imageButton1) ImageButton imgb1;
     @BindView(R.id.imageButton4) ImageButton imgb2;
@@ -84,14 +78,18 @@ public class PreprocessingActivity extends AppCompatActivity {
         //Intent que recibe los datos ingresados por el usuario
         Intent intent = getIntent();
         String nombre = intent.getStringExtra(CoreActivity.Nombre);
+        Rtotal = intent.getDoubleExtra(red,0.0 );
         String lugar = intent.getStringExtra(CoreActivity.Lugar);
+        Gtotal = intent.getDoubleExtra(green,0.0 );
         String descripcion = intent.getStringExtra(CoreActivity.Descripcion);
-        //txt2.setText("Nombre:"+nombre+"\n"+"Lugar:"+lugar+"\n"+"Descripción:"+descripcion);
+        Btotal = intent.getDoubleExtra(blue,0.0 );
+        Log.d("rgbT", String.valueOf(Rtotal+" "+Gtotal+" "+Btotal));
         txt3.setText(nombre);
         txt5.setText(lugar);
         txt7.setText(descripcion);
         imasinfondo=imread_mat("cromasinfondo");
         showima("cromasinfondo");
+
         //Funcion encargada de procesar la imagen
         procesarcroma();
     }
@@ -124,15 +122,7 @@ public class PreprocessingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     public void procesarcroma() {
-        //Lectura del croma orignal
-
-        Log.d("tamaño", String.valueOf(imasinfondo.size()));
-        //Umbrales para al segmentacion de cada capa
-
-        int threshb1=45;
-        int threshb2=95;
-        int threshr1=160;
-        int threshr2=110;
+        definirumbrales();
         //Inicializacion de cada Mat donde se cargara cada capa
         capa1=Mat.zeros(imasinfondo.size(),0);
         capa2=Mat.zeros(imasinfondo.size(),0);
@@ -144,75 +134,43 @@ public class PreprocessingActivity extends AppCompatActivity {
         double[] capab={255};
         double[] capan={0};
         //funciones encargadas de extraer las componentes bgr
-        Mat compb=componente(0);
-        Mat compr=componente(2);
+        Mat componentecapa1_1=componente(componentecapa1);
+        Mat componentecapa1_2=componente(componentecapa2);
+        int aux=0;
         //for encargado de segmentar las 3 capas
+        Log.d("umbrales", String.valueOf(componentecapa2_1D+" "+componentecapa2_1U));
         for (int i=0; i<rows; i++)
         {
             for (int j=0; j<cols; j++)
             {
-                double[] pixb = compb.get(i, j);
-                double[] pixr = compr.get(i, j);
-                if (pixb[0]>threshb1 && pixb[0]<threshb2  ) {
-                    capa2.put(i, j, capab);
-                }
-                else
-                    capa2.put(i, j, capan);
-                if (pixr[0]>threshr1 ) {
-                    capa3.put(i, j, capab);
-                }
-                else
-                    capa3.put(i, j, capan);
-                if (pixr[0]>threshr2 && pixr[0]<threshr1  ) {
-                    capa1.put(i, j, capab);
-                }
-                else
-                    capa1.put(i, j, capan);
-            }
+                double[] pix1_1 = componentecapa1_1.get(i, j);
+                double[] pix1_2 = componentecapa1_2.get(i, j);
+                double[] pixc = imasinfondo.get(i, j);
+                aux=1;
 
+                if ((pix1_1[0]>componentecapa1_1D) && (pix1_1[0]<componentecapa1_1U)  ) {
+                    capa3.put(i, j, capab);
+                    aux=0;
+                }
+                if (pixc[2]>0 && aux>0  ) {
+                    if (pix1_2[0] > componentecapa2_1D && pix1_2[0] < componentecapa2_1U) {
+                        capa1.put(i, j, capab);
+                    }
+                    else
+                        capa2.put(i, j, capab);
+                }
+
+            }
         }
-        //llamado de las funciones donde se terminara de segmentar cada capa y escribirla en la memoria
-        capa2=segcapa2(capa2);
+        calculararea(capa1);
+        calculararea(capa2);
+        calculararea(capa3);
         imwrite_mat(capa2,"capa2");
-        capa3=segcapa3(capa3);
         imwrite_mat(capa3,"capa3");
-        capa1=segcapa1(capa1);
         imwrite_mat(capa1,"capa1");
         //se muestra el croma en la actividad
-
     }
 
-    //funcion que segmenta la capa2
-    public Mat segcapa2(Mat temp)
-    {
-        temp=fillholes(temp,30000);
-        return temp;
-    }
-    public Mat segcapa3(Mat temp)
-    {
-        temp=fillholes(temp,80000);
-        return temp;
-    }
-    public Mat segcapa1(Mat temp)
-    {
-        //para segmentar esta capa se elimina lo sobrante de la capa2
-    int rows=imasinfondo.rows();
-    int cols=imasinfondo.cols();
-    double[] capab={255};
-    double[] capan={0};
-        for (int i=0; i<rows; i++)
-    {
-        for (int j=0; j<cols; j++)
-        {
-            double[] pix = capa2.get(i, j);
-            if (pix[0]>0 ) {
-                temp.put(i, j, capan);
-            }
-        }
-    }
-    temp=fillholes(temp,23000);
-        return temp;
-}
 
     public Mat imread_mat(String a){
         Mat imagen;
@@ -238,49 +196,9 @@ public class PreprocessingActivity extends AppCompatActivity {
         Mat imagen=ima;
         List<Mat> canales = new ArrayList<Mat>();
         imagen.zeros(imasinfondo.size(),imasinfondo.type());
-        Log.d("tamaño" + cont, String.valueOf(imasinfondo.size()));
         Core.split(imasinfondo,canales);
         imagen=canales.get(c);
         return imagen;
-    }
-    //esta funcion es la encargada de dejar solo el area mayor de la capa y eiminar los sobrantes
-    public Mat fillholes(Mat tempp,int areas){
-        tempp.zeros(imasinfondo.size(),imasinfondo.type());
-        double areatotal=0;
-        Point a= new Point(0,0);
-        Mat hierarchy = new Mat();
-        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
-        //se le dan los parametros para encontrar los contornos de la imagen
-        Imgproc.findContours(tempp,contours,hierarchy,Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_NONE);
-        //se lee cada contorno y si es demasiado pequeño se llena con negro
-        for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++) {
-            Mat area=contours.get(contourIdx);
-            double area2=Imgproc.contourArea(area);
-            if (area2<areas) {
-                Imgproc.drawContours(tempp, contours,contourIdx, new Scalar(0, 0,0),-1,8,hierarchy,0,a);
-                // Log.d("area", String.valueOf(area2));
-                //  temp2=contours.get(contourIdx);
-            }
-            //se haya el area total de cada capa
-            else
-               areatotal=areatotal+area2;
-            Log.d("area"+cont, String.valueOf(areatotal));
-
-        }
-        if (cont==1) {
-            Log.d("area" + cont, String.valueOf(areatotal));
-            Area1=areatotal;
-        }
-        if (cont==2) {
-            Log.d("area" + cont, String.valueOf(areatotal));
-            Area2=areatotal;
-        }
-        if (cont==3) {
-            Log.d("area" + cont, String.valueOf(areatotal));
-            Area3=areatotal;
-        }
-        cont = cont + 1;
-        return tempp;
     }
     @OnClick(R.id.imageButton1)
     public void colorcroma(View view) {
@@ -347,9 +265,102 @@ public class PreprocessingActivity extends AppCompatActivity {
         Log.d("rgb", String.valueOf(r3+" "+g3+" "+b3));
         imgb4.setColorFilter(Color.rgb(r3,g3,b3));
     }
-   // public int definirumbrales(){
 
+    public void calculararea(Mat tempp){
+        tempp.zeros(imasinfondo.size(),imasinfondo.type());
+        double areatotal=0;
+        Point a= new Point(0,0);
+        Mat hierarchy = new Mat();
+        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+        //se le dan los parametros para encontrar los contornos de la imagen
+        Imgproc.findContours(tempp,contours,hierarchy,Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_NONE);
+        //se lee cada contorno y si es demasiado pequeño se llena con negro
+        for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++) {
+            Mat area = contours.get(contourIdx);
+            double area2 = Imgproc.contourArea(area);
+            areatotal=area2+areatotal;
+        }
+        if (cont==1) {
+            Log.d("area" + cont, String.valueOf(areatotal));
+            Area1=areatotal;
+        }
+        if (cont==2) {
+            Log.d("area" + cont, String.valueOf(areatotal));
+            Area2=areatotal;
+        }
+        if (cont==3) {
+            Log.d("area" + cont, String.valueOf(areatotal));
+            Area3=areatotal;
+        }
+        cont = cont + 1;
+    }
 
+    public void definirumbrales(){
 
-   // }
+        if (Btotal>113 && Btotal<116){
+            componentecapa1=2;
+            componentecapa2=0;
+            componentecapa1_1D=100;
+            componentecapa1_1U=140;
+            componentecapa2_1D=0;
+            componentecapa2_1U=110;
+        }
+        if (Btotal>88 && Btotal<90){
+            componentecapa1=2;
+            componentecapa2=0;
+            componentecapa1_1D=100;
+            componentecapa1_1U=140;
+            componentecapa2_1D=0;
+            componentecapa2_1U=110;
+        }
+        if (Btotal>93 && Btotal<96){
+            componentecapa1=2;
+            componentecapa2=0;
+            componentecapa1_1D=100;
+            componentecapa1_1U=140;
+            componentecapa2_1D=0;
+            componentecapa2_1U=110;
+        }
+        if (Btotal>98 && Btotal<100){
+            componentecapa1=0;
+            componentecapa2=2;
+            componentecapa1_1D=100;
+            componentecapa1_1U=140;
+            componentecapa2_1D=0;
+            componentecapa2_1U=110;
+        }
+        if (Btotal>106 && Btotal<109){
+            componentecapa1=0;
+            componentecapa2=2;
+            componentecapa1_1D=90;
+            componentecapa1_1U=95;
+            componentecapa2_1D=160;
+            componentecapa2_1U=190;
+        }
+        if (Btotal>111 && Btotal<113){
+            componentecapa1=2;
+            componentecapa2=0;
+            componentecapa1_1D=100;
+            componentecapa1_1U=140;
+            componentecapa2_1D=0;
+            componentecapa2_1U=110;
+        }
+        if (Btotal>118 && Btotal<120){
+            componentecapa1=2;
+            componentecapa2=0;
+            componentecapa1_1D=130;
+            componentecapa1_1U=150;
+            componentecapa2_1D=0;
+            componentecapa2_1U=110;
+        }
+        if (Btotal>116 && Btotal<118){
+            componentecapa1=0;
+            componentecapa2=2;
+            componentecapa1_1D=130;
+            componentecapa1_1U=140;
+            componentecapa2_1D=140;
+            componentecapa2_1U=190;
+        }
+
+    }
 }
